@@ -3,12 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package vnu.geoterms.core.interfaces;
+package vnu.geoterms.core.Interface;
 
 /**
  *
  * @author Khanh
  */
-public interface IDatabase {
+public interface IComparator {
 
+    int compare(Object o1, Object o2);
 }

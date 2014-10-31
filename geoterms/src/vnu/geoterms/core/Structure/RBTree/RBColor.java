@@ -3,19 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package vnu.geoterms.core.interfaces;
+package vnu.geoterms.core.Structure.RBTree;
 
 /**
  *
  * @author Khanh
  */
-public interface IStructure {
+enum RBColor {
 
-    void insert(Object item);
-
-    void remove(Object item);
-
-    void search(Object item);
-
-    IIterator getIterator();
+    Red,
+    Black
 }

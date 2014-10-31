@@ -5,7 +5,9 @@
  */
 package vnu.geoterms;
 
-import vnu.geoterms.ui.JFrameMain;
+import java.util.*;
+import javax.swing.UIManager;
+import vnu.geoterms.client.JFrameMain;
 
 /**
  *
@@ -25,7 +27,7 @@ public class Geoterms {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    javax.swing.UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
                     break;
                 }
             }
@@ -46,5 +48,8 @@ public class Geoterms {
                 new JFrameMain().setVisible(true);
             }
         });
+
+
+       
     }
 }

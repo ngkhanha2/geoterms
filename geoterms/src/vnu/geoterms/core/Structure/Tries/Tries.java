@@ -3,35 +3,38 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package vnu.geoterms.core.rbtree;
+package vnu.geoterms.core.Structure.Tries;
 
-import vnu.geoterms.core.interfaces.*;
+import vnu.geoterms.core.Interface.*;
 
 /**
  *
  * @author Khanh
  */
-public class RBTree implements IStructure {
-
-    private IComparator comparator;
+public class Tries implements IStructure {
 
     @Override
-    public void insert(Object item) {
+    public void insert(Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void remove(Object item) {
+    public void remove(Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void search(Object item) {
+    public Object find(Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public IIterator getIterator() {
+    public Object take(Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void close() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
