@@ -5,17 +5,32 @@
  */
 package vnu.geoterms.ui;
 
+import java.awt.event.ActionListener;
+import javax.swing.DefaultListModel;
+import vnu.geoterms.storage.jspd.Dictionary;
+
 /**
  *
  * @author Khanh
  */
 public class JFrameMain extends javax.swing.JFrame {
 
+    private Dictionary dict;
+    private JPanelDictionary jpd;
+
     /**
      * Creates new form JFrameMain
      */
     public JFrameMain() {
         initComponents();
+        jpd = new JPanelDictionary();
+
+        this.tabs.addTab("My dictionary", jpd);
+        dict = new Dictionary("AnhViet.jspd");
+
+        jpd.getMatches().setModel(dict.getModel());
+        //jpd.getMatches().add(null, jpd)
+
     }
 
     /**
@@ -27,23 +42,107 @@ public class JFrameMain extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        tabs = new javax.swing.JTabbedPane();
+        inputField = new javax.swing.JTextField();
+        jButtonSearch = new javax.swing.JButton();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        itemManageDictionaries = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        inputField.setMaximumSize(new java.awt.Dimension(200, 2147483647));
+        inputField.setMinimumSize(new java.awt.Dimension(200, 20));
+        inputField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                inputFieldKeyReleased(evt);
+            }
+        });
+
+        jButtonSearch.setText("Search");
+        jButtonSearch.setToolTipText("");
+        jButtonSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSearchActionPerformed(evt);
+            }
+        });
+
+        jMenu1.setText("Tools");
+
+        itemManageDictionaries.setText("Manage Dictionaries");
+        jMenu1.add(itemManageDictionaries);
+
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Help");
+        jMenuBar1.add(jMenu2);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(tabs)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(inputField, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonSearch)
+                .addContainerGap(423, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(inputField, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonSearch))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(tabs, javax.swing.GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButtonSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSearchActionPerformed
+        // TODO add your handling code here:
+        if (evt.getSource() == jButtonSearch) {
+            String s = inputField.getText();
+            System.out.println(s);
+            int index = dict.find(s);
+            if (index != -1) {
+                //jpd.getMatches().setSelectedIndex(index);
+                jpd.getMatches().ensureIndexIsVisible(index);
+                jpd.setVisible(true);
+            }
+        }
+
+    }//GEN-LAST:event_jButtonSearchActionPerformed
+
+    private void inputFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_inputFieldKeyReleased
+        // TODO add your handling code here:
+        if (evt.getSource() == inputField) {
+            String s = inputField.getText();
+            int index = dict.find(s);
+            if (index != -1) {
+                //jpd.getMatches().setSelectedIndex(index);
+                jpd.getMatches().ensureIndexIsVisible(index);
+                jpd.setVisible(true);
+            }
+        }
+    }//GEN-LAST:event_inputFieldKeyReleased
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField inputField;
+    private javax.swing.JMenuItem itemManageDictionaries;
+    private javax.swing.JButton jButtonSearch;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JTabbedPane tabs;
     // End of variables declaration//GEN-END:variables
 }
