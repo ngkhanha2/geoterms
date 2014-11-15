@@ -5,21 +5,31 @@
  */
 package vnu.geoterms.core.Interface;
 
+import javax.swing.ListModel;
+
 /**
  *
  * @author Khanh
  */
 public interface IDictionary {
 
+    ListModel getModel();
+
     int insert(String entry, String definition);
 
-    void edit(String entry, String newEntry, String newDefinition);
+    int edit(String entry, String newEntry, String newDefinition);
 
-    void edit(int index, String newEntry, String newDefinition);
+    int edit(int index, String newEntry, String newDefinition);
 
-    void remove(String entry);
+    int remove(int index);
+
+    int remove(String entry);
 
     int find(String entry);
 
+    String getEntry(int index);
+    
+    String getDefinition(int index);
+    
     void close();
 }

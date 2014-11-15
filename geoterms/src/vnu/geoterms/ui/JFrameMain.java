@@ -5,9 +5,7 @@
  */
 package vnu.geoterms.ui;
 
-import java.awt.event.ActionListener;
-import javax.swing.DefaultListModel;
-import vnu.geoterms.storage.jspd.Dictionary;
+import vnu.geoterms.storage.jspd.*;
 
 /**
  *
@@ -29,8 +27,10 @@ public class JFrameMain extends javax.swing.JFrame {
         dict = new Dictionary("AnhViet.jspd");
 
         jpd.getMatches().setModel(dict.getModel());
-        //jpd.getMatches().add(null, jpd)
+        jpd.getfDisplay().setText(dict.getDefinition(20));
+        //int doDaiList = jpd.getScrollList().getVerticalScrollBar().getMaximum() / dict.Info.tongSoTu;
 
+        //jpd.getMatches().add(null, jpd)
     }
 
     /**
@@ -109,30 +109,12 @@ public class JFrameMain extends javax.swing.JFrame {
 
     private void jButtonSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSearchActionPerformed
         // TODO add your handling code here:
-        if (evt.getSource() == jButtonSearch) {
-            String s = inputField.getText();
-            System.out.println(s);
-            int index = dict.find(s);
-            if (index != -1) {
-                //jpd.getMatches().setSelectedIndex(index);
-                jpd.getMatches().ensureIndexIsVisible(index);
-                jpd.setVisible(true);
-            }
-        }
 
     }//GEN-LAST:event_jButtonSearchActionPerformed
 
     private void inputFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_inputFieldKeyReleased
         // TODO add your handling code here:
-        if (evt.getSource() == inputField) {
-            String s = inputField.getText();
-            int index = dict.find(s);
-            if (index != -1) {
-                //jpd.getMatches().setSelectedIndex(index);
-                jpd.getMatches().ensureIndexIsVisible(index);
-                jpd.setVisible(true);
-            }
-        }
+
     }//GEN-LAST:event_inputFieldKeyReleased
 
 

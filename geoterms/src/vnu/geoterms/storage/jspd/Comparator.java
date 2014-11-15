@@ -5,32 +5,28 @@
  */
 package vnu.geoterms.storage.jspd;
 
-import java.io.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import vnu.geoterms.core.Interface.*;
+import java.text.Collator;
+import java.util.Locale;
+import vnu.geoterms.core.Interface.IComparator;
 
 /**
  *
  * @author Khanh
  */
-public class Connector implements IConnector {
+public class Comparator implements IComparator {
 
-    private int fileOffset;
+    Collator collator;
 
-    public Connector(String fileName) {
-
+    public Comparator() {
+        this.collator = Collator.getInstance(Locale.US);
     }
 
     @Override
-    public Object get(int offset, int bytes) {
-
+    public int compare(Object o1, Object o2) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public void close() {
-
+    public int compare(String s1, String s2) {
+        return this.collator.compare(s1, s2);
     }
-
 }

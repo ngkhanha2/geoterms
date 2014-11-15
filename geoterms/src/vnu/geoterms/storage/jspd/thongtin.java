@@ -9,7 +9,7 @@ package vnu.geoterms.storage.jspd;
  *
  * @author Khanh
  */
-class thongtin {
+public class thongtin {
 
     public String maSapXep;
     public String phatAm;

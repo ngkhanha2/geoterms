@@ -6,7 +6,9 @@
 
 package vnu.geoterms.ui;
 
+import javax.swing.JEditorPane;
 import javax.swing.JList;
+import javax.swing.JScrollPane;
 
 /**
  *
@@ -39,6 +41,8 @@ public class JPanelDictionary extends javax.swing.JPanel {
         jSplitPane1.setDividerLocation(100);
 
         scrollList.setBorder(javax.swing.BorderFactory.createTitledBorder("Entries"));
+        scrollList.setAutoscrolls(true);
+        scrollList.setHorizontalScrollBar(null);
         scrollList.setViewportView(matches);
 
         jSplitPane1.setLeftComponent(scrollList);
@@ -52,11 +56,11 @@ public class JPanelDictionary extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 617, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -69,7 +73,21 @@ public class JPanelDictionary extends javax.swing.JPanel {
     private javax.swing.JScrollPane scrollList;
     // End of variables declaration//GEN-END:variables
 
+    public JScrollPane getScrollList() {
+        return scrollList;
+    }
+
     public JList getMatches() {
         return matches;
     }
+
+    public JEditorPane getfDisplay() {
+        return fDisplay;
+    }
+
+    public JScrollPane getjScrollPane() {
+        return jScrollPane;
+    }
+
+    
 }
