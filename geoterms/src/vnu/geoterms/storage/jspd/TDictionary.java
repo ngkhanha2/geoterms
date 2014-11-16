@@ -424,6 +424,8 @@ public class TDictionary {
             byte[] bList = new byte[(int) this.raf.length() - this.startListFilePointer];
             this.raf.seek(this.startListFilePointer);
             this.raf.read(bList, 0, bList.length);
+            
+            
             this.raf.seek(this.startListFilePointer - this.Info.info.length - 2);
 
             this.bs = tu.getBytes("UTF-8");
@@ -462,16 +464,20 @@ public class TDictionary {
             this.raf.seek(this.startListFilePointer + viTriSua * 4);
             this.viTriTu = this.raf.readInt();
             this.raf.seek(this.viTriTu);
+            
             this.doDaiString = this.raf.readShort();
             if (this.doDaiString > this.bs.length) {
                 this.bs = new byte[this.doDaiString];
             }
             this.raf.read(this.bs, 0, this.doDaiString);
             this.tu = new String(this.bs, 0, this.doDaiString, "UTF-8");
+            
             this.raf.seek(this.raf.getFilePointer() - this.doDaiString - 2L);
             this.doDaiString = this.raf.readShort();
             this.bs = new byte[this.doDaiString];
             this.raf.write(this.bs, 0, this.doDaiString);
+            
+            
             this.doDaiString = this.raf.readInt();
             this.bs = new byte[this.doDaiString];
             this.raf.write(this.bs, 0, this.doDaiString);
@@ -479,6 +485,7 @@ public class TDictionary {
             byte[] bList = new byte[(int) this.raf.length() - this.startListFilePointer];
             this.raf.seek(this.startListFilePointer);
             this.raf.read(bList, 0, bList.length);
+            
             this.raf.seek(this.startListFilePointer - this.Info.info.length - 2);
 
             this.bs = this.tu.getBytes("UTF-8");
@@ -488,6 +495,7 @@ public class TDictionary {
             this.bs = nghiaSua.getBytes("UTF-8");
             this.raf.writeInt(this.bs.length);
             this.raf.write(this.bs, 0, this.bs.length);
+            
             byte[] b = ByteAdvance.intToByteArray(this.startListFilePointer - this.Info.info.length - 2);
             for (this.tgi = 0; this.tgi < 4; this.tgi += 1) {
                 bList[(this.tgi + viTriSua * 4)] = b[this.tgi];
@@ -516,9 +524,11 @@ public class TDictionary {
             this.raf.seek(this.startListFilePointer + viTriXoa * 4);
             this.viTriTu = this.raf.readInt();
             this.raf.seek(this.viTriTu);
+            
             this.doDaiString = this.raf.readShort();
             this.bs = new byte[this.doDaiString];
             this.raf.write(this.bs, 0, this.doDaiString);
+            
             this.doDaiString = this.raf.readInt();
             this.bs = new byte[this.doDaiString];
             this.raf.write(this.bs, 0, this.doDaiString);
@@ -526,6 +536,7 @@ public class TDictionary {
             byte[] bList = new byte[(this.Info.tongSoTu - viTriXoa - 1) * 4];
             this.raf.seek(this.startListFilePointer + viTriXoa * 4 + 4);
             this.raf.read(bList, 0, bList.length);
+            
             this.raf.seek(this.startListFilePointer + viTriXoa * 4);
             this.raf.write(bList, 0, bList.length);
             this.raf.setLength(this.raf.getFilePointer());

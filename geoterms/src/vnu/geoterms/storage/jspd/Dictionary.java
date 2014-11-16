@@ -17,15 +17,15 @@ import vnu.geoterms.core.Interface.IDictionary;
  * @author Khanh
  */
 public class Dictionary implements IDictionary {
-    
+
     private long listFileOffset;
     private DefaultListModel<String> model;
     private Comparator comparator;
-    
+
     private RandomAccessFile raf;
     private int dataRemain;
-    private byte[] splitInformation;
-    
+    private byte[] otherInformation;
+
     public Dictionary(String fileName) {
         try {
             File f = new File(fileName);
@@ -37,14 +37,14 @@ public class Dictionary implements IDictionary {
             if (!title.equals("2SPDict")) {
                 return;
             }
-            
+
             this.listFileOffset = this.raf.readInt();
             this.dataRemain = this.raf.readInt();
             this.raf.seek(this.listFileOffset);
             //Read other information of jspd file
-            this.splitInformation = readShortBytesAtFilePointer();
+            this.otherInformation = readShortBytesAtFilePointer();
             this.listFileOffset = this.raf.getFilePointer();
-            
+
             this.comparator = new Comparator();
 
             //Read the entries of the dictionary
@@ -55,15 +55,15 @@ public class Dictionary implements IDictionary {
                 this.model.addElement(readShortStringAtFilePointer());
             }
         } catch (Exception ex) {
-            
+
         }
     }
-    
+
     private void changeFilePointerByListIndex(int index) throws IOException {
         this.raf.seek(this.listFileOffset + index * 4);
         this.raf.seek(this.raf.readInt());
     }
-    
+
     private byte[] readShortBytesAtFilePointer() throws IOException {
         // Get length of buffer
         int length = this.raf.readShort();
@@ -73,7 +73,7 @@ public class Dictionary implements IDictionary {
         this.raf.read(buffer, 0, length);
         return buffer;
     }
-    
+
     private byte[] readLongBytesAtFilePointer() throws IOException {
         // Get length of buffer
         int length = this.raf.readInt();
@@ -83,7 +83,7 @@ public class Dictionary implements IDictionary {
         this.raf.read(buffer, 0, length);
         return buffer;
     }
-    
+
     private byte[] readShortBytesAtFileOffset(long offset) throws IOException {
         this.raf.seek(offset);
         int length = this.raf.readShort();
@@ -91,7 +91,7 @@ public class Dictionary implements IDictionary {
         this.raf.read(buffer, 0, length);
         return buffer;
     }
-    
+
     private byte[] readLongBytesAtFileOffset(long offset) throws IOException {
         this.raf.seek(offset);
         int length = this.raf.readInt();
@@ -99,48 +99,57 @@ public class Dictionary implements IDictionary {
         this.raf.read(buffer, 0, length);
         return buffer;
     }
-    
+
     private byte[] readBytesAtFileOffset(long offset, int length) throws IOException {
         this.raf.seek(offset);
         byte[] buffer = new byte[length];
         this.raf.read(buffer, 0, length);
         return buffer;
     }
-    
+
     private String readShortStringAtFilePointer() throws IOException {
         //Get buffer
         byte[] buffer = readShortBytesAtFilePointer();
         //Convert buffer to string
         return new String(buffer, 0, buffer.length, "UTF-8");
     }
-    
+
     private String readLongStringAtFilePointer() throws IOException {
         //Get buffer
         byte[] buffer = readLongBytesAtFilePointer();
         //Convert buffer to string
         return new String(buffer, 0, buffer.length, "UTF-8");
     }
-    
+
     private void writeShortBytesAtFilePointer(byte[] bytes, int length) throws IOException {
         this.raf.writeShort(length);
         this.raf.write(bytes, 0, length);
     }
-    
+
     private void writeLongBytesAtFilePointer(byte[] bytes, int length) throws IOException {
         this.raf.writeInt(length);
         this.raf.write(bytes, 0, length);
     }
-    
+
     private void writeShortStringAtFilePointer(String s) throws IOException {
         byte[] bytes = s.getBytes("UTF-8");
         writeShortBytesAtFilePointer(bytes, bytes.length);
     }
-    
+
     private void writeLongStringAtFilePointer(String s) throws IOException {
         byte[] bytes = s.getBytes("UTF-8");
         writeLongBytesAtFilePointer(bytes, bytes.length);
     }
-    
+
+    private byte[] intToByteArray(int i) {
+        byte[] dword = new byte[4];
+        dword[0] = ((byte) (i >> 24 & 0xFF));
+        dword[1] = ((byte) (i >> 16 & 0xFF));
+        dword[2] = ((byte) (i >> 8 & 0xFF));
+        dword[3] = ((byte) (i & 0xFF));
+        return dword;
+    }
+
     private int binarySearch(String entry) {
         int left = 0;
         int right = this.model.getSize() - 1;
@@ -155,32 +164,33 @@ public class Dictionary implements IDictionary {
         }
         return left;
     }
-    
+
     @Override
     public ListModel getModel() {
         return this.model;
     }
-    
+
     @Override
     public int insert(String entry, String definition) {
         int index = binarySearch(entry);
         try {
             byte[] byteEntryList = readBytesAtFileOffset(this.listFileOffset, (int) (this.raf.length() - this.listFileOffset));
-            
+            this.raf.seek(this.listFileOffset - this.otherInformation.length - 2);
+
             writeShortStringAtFilePointer(entry);
-            
+
             writeLongStringAtFilePointer(definition);
-            
-            writeShortBytesAtFilePointer(this.splitInformation, this.splitInformation.length);
-            
+
+            writeShortBytesAtFilePointer(this.otherInformation, this.otherInformation.length);
+
             int filePointer = (int) this.raf.getFilePointer();
             this.raf.write(byteEntryList, 0, index * 4);
-            this.raf.writeInt((int) this.listFileOffset - this.splitInformation.length - 2);
+            this.raf.writeInt((int) this.listFileOffset - this.otherInformation.length - 2);
             this.raf.write(byteEntryList, index * 4, byteEntryList.length - index * 4);
-            
+
             this.raf.seek(7L);
-            
-            this.raf.writeInt(filePointer - this.splitInformation.length - 2);
+
+            this.raf.writeInt(filePointer - this.otherInformation.length - 2);
             this.listFileOffset = filePointer;
             this.model.insertElementAt(entry, index);
         } catch (Exception ex) {
@@ -188,43 +198,99 @@ public class Dictionary implements IDictionary {
         }
         return index;
     }
-    
+
     @Override
-    public int edit(String entry, String newEntry, String newDefinition) {
-        return edit(binarySearch(entry), newEntry, newDefinition);
+    public int edit(String entry, String newDefinition) {
+        return edit(binarySearch(entry), newDefinition);
     }
-    
+
     @Override
-    public int edit(int index, String newEntry, String newDefinition) {
-        
-        return 0;
+    public int edit(int index, String newDefinition) {
+        if (index < 0 || index >= this.model.getSize()) {
+            return -1;
+        }
+        try {
+            changeFilePointerByListIndex(index);
+
+            String entry = readShortStringAtFilePointer();
+
+            this.raf.seek(this.raf.getFilePointer() - entry.getBytes().length - 2L);
+            int length = this.raf.readShort();
+            this.raf.write(new byte[length], 0, length);
+
+            length = this.raf.readInt();
+            this.raf.write(new byte[length], 0, length);
+
+            byte[] byteEntryList = readBytesAtFileOffset(listFileOffset, (int) (this.raf.length() - this.listFileOffset));
+            this.raf.seek(this.listFileOffset - this.otherInformation.length - 2);
+
+            writeShortStringAtFilePointer(entry);
+            writeLongStringAtFilePointer(newDefinition);
+
+            byte[] b = intToByteArray((int) (this.listFileOffset - this.otherInformation.length) - 2);
+            for (int i = 0; i < 4; ++i) {
+                byteEntryList[i + index * 4] = b[i];
+            }
+
+            writeShortBytesAtFilePointer(this.otherInformation, this.otherInformation.length);
+
+            long filePointer = this.raf.getFilePointer();
+            this.raf.write(byteEntryList, 0, byteEntryList.length);
+
+            this.raf.seek(7L);
+            this.raf.writeInt((int) (filePointer - this.otherInformation.length - 2));
+            ++this.dataRemain;
+            this.raf.writeInt(this.dataRemain);
+            this.listFileOffset = filePointer;
+        } catch (Exception ex) {
+            index = -1;
+        }
+        return index;
     }
-    
+
     @Override
     public int remove(String entry) {
         return remove(binarySearch(entry));
     }
-    
+
     @Override
     public int remove(int index) {
-        try {
-            
-        } catch (Exception ex) {
-            
+        if (index < 0 || index >= this.model.getSize()) {
+            return -1;
         }
-        return 0;
+        try {
+            changeFilePointerByListIndex(index);
+            int length = this.raf.readShort();
+            this.raf.write(new byte[length], 0, length);
+
+            length = this.raf.readInt();
+            this.raf.write(new byte[length], 0, length);
+
+            byte[] byteEntryList = readBytesAtFileOffset(this.listFileOffset + index * 4 + 4, (this.model.getSize() - index - 1) * 4);
+
+            this.raf.seek(this.listFileOffset + index * 4);
+            this.raf.write(byteEntryList, 0, byteEntryList.length);
+            this.raf.setLength(this.raf.getFilePointer());
+            this.raf.seek(11L);
+            this.model.removeElementAt(index);
+            ++this.dataRemain;
+            this.raf.writeInt(this.dataRemain);
+        } catch (Exception ex) {
+            index = -1;
+        }
+        return index;
     }
-    
+
     @Override
     public int find(String entry) {
         return binarySearch(entry);
     }
-    
+
     @Override
     public void close() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
     @Override
     public String getEntry(int index) {
         if (index < 0 || index >= this.model.getSize()) {
@@ -234,11 +300,11 @@ public class Dictionary implements IDictionary {
             changeFilePointerByListIndex(index);
             return readShortStringAtFilePointer();
         } catch (Exception ex) {
-            
+
         }
         return null;
     }
-    
+
     @Override
     public String getDefinition(int index) {
         if (index < 0 || index >= this.model.getSize()) {
@@ -251,7 +317,7 @@ public class Dictionary implements IDictionary {
         try {
             return readLongStringAtFilePointer();
         } catch (Exception ex) {
-            
+
         }
         return null;
     }

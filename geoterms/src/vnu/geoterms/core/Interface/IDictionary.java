@@ -17,9 +17,9 @@ public interface IDictionary {
 
     int insert(String entry, String definition);
 
-    int edit(String entry, String newEntry, String newDefinition);
+    int edit(String entry, String newDefinition);
 
-    int edit(int index, String newEntry, String newDefinition);
+    int edit(int index, String newDefinition);
 
     int remove(int index);
 
@@ -28,8 +28,8 @@ public interface IDictionary {
     int find(String entry);
 
     String getEntry(int index);
-    
+
     String getDefinition(int index);
-    
+
     void close();
 }
