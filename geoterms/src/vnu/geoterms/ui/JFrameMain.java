@@ -5,6 +5,8 @@
  */
 package vnu.geoterms.ui;
 
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import vnu.geoterms.storage.jspd.*;
 
 /**
@@ -12,8 +14,10 @@ import vnu.geoterms.storage.jspd.*;
  * @author Khanh
  */
 public class JFrameMain extends javax.swing.JFrame {
-    
-    private Dictionary dict;
+
+    private Dictionary dictionary;
+
+    private String const_dictionary_file = "vnu_geoterms_demo.jspd";
 
     /**
      * Creates new form JFrameMain
@@ -22,8 +26,8 @@ public class JFrameMain extends javax.swing.JFrame {
         initComponents();
 
         //this.tabs.addTab("My dictionary", jpd);
-        dict = new Dictionary("AnhViet.jspd");
-        this.jListEntry.setModel(dict.getModel());
+        this.dictionary = new Dictionary(const_dictionary_file);
+        this.jListEntry.setModel(dictionary.getModel());
         //jpd.getMatches().add(null, jpd)
     }
 
@@ -37,11 +41,11 @@ public class JFrameMain extends javax.swing.JFrame {
     private void initComponents() {
 
         jTextFieldInput = new javax.swing.JTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        jScrollPaneEntry = new javax.swing.JScrollPane();
         jListEntry = new javax.swing.JList();
-        jScrollPane2 = new javax.swing.JScrollPane();
+        jScrollPaneDefinition = new javax.swing.JScrollPane();
         jTextPaneDefinition = new javax.swing.JTextPane();
-        jButtonAdd = new javax.swing.JButton();
+        jButtonInsert = new javax.swing.JButton();
         jButtonEdit = new javax.swing.JButton();
         jButtonRemove = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -51,6 +55,7 @@ public class JFrameMain extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("VNU - Geoterms - 1st Demo");
 
         jTextFieldInput.setMinimumSize(new java.awt.Dimension(100, 20));
         jTextFieldInput.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -65,14 +70,14 @@ public class JFrameMain extends javax.swing.JFrame {
                 jListEntryMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(jListEntry);
+        jScrollPaneEntry.setViewportView(jListEntry);
 
-        jScrollPane2.setViewportView(jTextPaneDefinition);
+        jScrollPaneDefinition.setViewportView(jTextPaneDefinition);
 
-        jButtonAdd.setText("Add");
-        jButtonAdd.addMouseListener(new java.awt.event.MouseAdapter() {
+        jButtonInsert.setText("Insert");
+        jButtonInsert.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButtonAddMouseClicked(evt);
+                jButtonInsertMouseClicked(evt);
             }
         });
 
@@ -111,7 +116,7 @@ public class JFrameMain extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPaneEntry, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -119,13 +124,13 @@ public class JFrameMain extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButtonAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButtonInsert, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonRemove, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 154, Short.MAX_VALUE))
-                    .addComponent(jScrollPane2))
+                    .addComponent(jScrollPaneDefinition))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -134,14 +139,14 @@ public class JFrameMain extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldInput, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonAdd)
+                    .addComponent(jButtonInsert)
                     .addComponent(jButtonEdit)
                     .addComponent(jButtonRemove)
                     .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE))
+                    .addComponent(jScrollPaneDefinition)
+                    .addComponent(jScrollPaneEntry, javax.swing.GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -150,44 +155,66 @@ public class JFrameMain extends javax.swing.JFrame {
 
     private void jTextFieldInputKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldInputKeyReleased
         // TODO add your handling code here:
-        int index = this.dict.find(this.jTextFieldInput.getText());
+        int index = this.dictionary.find(this.jTextFieldInput.getText());
         if (index >= 0) {
             this.jListEntry.setSelectedIndex(index);
             this.jListEntry.ensureIndexIsVisible(index);
-            this.jScrollPane1.getVerticalScrollBar().setValue(index * this.jListEntry.getFixedCellHeight());
+            this.jScrollPaneEntry.getVerticalScrollBar().setValue(index * this.jListEntry.getFixedCellHeight());
         }
     }//GEN-LAST:event_jTextFieldInputKeyReleased
 
     private void jListEntryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jListEntryMouseClicked
         // TODO add your handling code here:
-        this.jTextPaneDefinition.setText(this.dict.getDefinition(this.jListEntry.getSelectedIndex()));
+        this.jTextPaneDefinition.setText(this.dictionary.getDefinition(this.jListEntry.getSelectedIndex()));
     }//GEN-LAST:event_jListEntryMouseClicked
 
-    private void jButtonAddMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonAddMouseClicked
+    private void jButtonInsertMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonInsertMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButtonAddMouseClicked
+        JDialog jDialog = new JDialogInsert(this, true, this.dictionary);
+        jDialog.setLocationRelativeTo(this);
+        jDialog.setVisible(true);
+        jDialog = null;
+    }//GEN-LAST:event_jButtonInsertMouseClicked
 
     private void jButtonEditMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonEditMouseClicked
         // TODO add your handling code here:
+        int index = this.jListEntry.getSelectedIndex();
+        if (index == -1) {
+            JOptionPane.showMessageDialog(this, "Oop! You must choose an entry.");
+            return;
+        }
+        JDialog jDialog = new JDialogEdit(this, true, this.dictionary, index);
+        jDialog.setLocationRelativeTo(this);
+        jDialog.setVisible(true);
+        jDialog = null;
     }//GEN-LAST:event_jButtonEditMouseClicked
 
     private void jButtonRemoveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonRemoveMouseClicked
         // TODO add your handling code here:
+        int index = this.jListEntry.getSelectedIndex();
+        if (index == -1) {
+            JOptionPane.showMessageDialog(this, "Oop! You must choose an entry.");
+            return;
+        }
+        int result = this.dictionary.remove(index);
+        if (result == -1) {
+            JOptionPane.showMessageDialog(this, "An error has occurred when you remove your entry.");
+        }
     }//GEN-LAST:event_jButtonRemoveMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem itemManageDictionaries;
-    private javax.swing.JButton jButtonAdd;
     private javax.swing.JButton jButtonEdit;
+    private javax.swing.JButton jButtonInsert;
     private javax.swing.JButton jButtonRemove;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JList jListEntry;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPaneDefinition;
+    private javax.swing.JScrollPane jScrollPaneEntry;
     private javax.swing.JTextField jTextFieldInput;
     private javax.swing.JTextPane jTextPaneDefinition;
     // End of variables declaration//GEN-END:variables

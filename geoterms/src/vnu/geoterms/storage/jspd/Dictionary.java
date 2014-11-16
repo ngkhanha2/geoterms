@@ -150,7 +150,7 @@ public class Dictionary implements IDictionary {
         return dword;
     }
 
-    private int binarySearch(String entry) {
+    private int binarySearchPosition(String entry) {
         int left = 0;
         int right = this.model.getSize() - 1;
         int mid;
@@ -165,6 +165,28 @@ public class Dictionary implements IDictionary {
         return left;
     }
 
+    private int binarySearchExisting(String entry) {
+        int left = 0;
+        int right = this.model.getSize() - 1;
+        int mid;
+        int equal;
+
+        while (left <= right) {
+            mid = (left + right) >> 1;
+            equal = this.comparator.compare(entry, this.model.elementAt(mid));
+            if (equal == 0) {
+                return mid;
+            } else {
+                if (equal < 0) {
+                    right = mid - 1;
+                } else {
+                    left = mid + 1;
+                }
+            }
+        }
+        return -1;
+    }
+
     @Override
     public ListModel getModel() {
         return this.model;
@@ -172,7 +194,11 @@ public class Dictionary implements IDictionary {
 
     @Override
     public int insert(String entry, String definition) {
-        int index = binarySearch(entry);
+        int index = binarySearchExisting(entry);
+        if (index != -1) {
+            return -2;
+        }
+        index = binarySearchPosition(entry);
         try {
             byte[] byteEntryList = readBytesAtFileOffset(this.listFileOffset, (int) (this.raf.length() - this.listFileOffset));
             this.raf.seek(this.listFileOffset - this.otherInformation.length - 2);
@@ -201,7 +227,11 @@ public class Dictionary implements IDictionary {
 
     @Override
     public int edit(String entry, String newDefinition) {
-        return edit(binarySearch(entry), newDefinition);
+        int index = binarySearchExisting(entry);
+        if (index == -1) {
+            return -1;
+        }
+        return edit(index, newDefinition);
     }
 
     @Override
@@ -250,7 +280,11 @@ public class Dictionary implements IDictionary {
 
     @Override
     public int remove(String entry) {
-        return remove(binarySearch(entry));
+        int index = binarySearchExisting(entry);
+        if (index == -1) {
+            return -1;
+        }
+        return remove(index);
     }
 
     @Override
@@ -283,7 +317,7 @@ public class Dictionary implements IDictionary {
 
     @Override
     public int find(String entry) {
-        return binarySearch(entry);
+        return binarySearchPosition(entry);
     }
 
     @Override
