@@ -12,24 +12,18 @@ import vnu.geoterms.storage.jspd.*;
  * @author Khanh
  */
 public class JFrameMain extends javax.swing.JFrame {
-
+    
     private Dictionary dict;
-    private JPanelDictionary jpd;
 
     /**
      * Creates new form JFrameMain
      */
     public JFrameMain() {
         initComponents();
-        jpd = new JPanelDictionary();
 
-        this.tabs.addTab("My dictionary", jpd);
+        //this.tabs.addTab("My dictionary", jpd);
         dict = new Dictionary("AnhViet.jspd");
-
-        jpd.getMatches().setModel(dict.getModel());
-        jpd.getfDisplay().setText(dict.getDefinition(20));
-        //int doDaiList = jpd.getScrollList().getVerticalScrollBar().getMaximum() / dict.Info.tongSoTu;
-
+        this.jListEntry.setModel(dict.getModel());
         //jpd.getMatches().add(null, jpd)
     }
 
@@ -42,9 +36,15 @@ public class JFrameMain extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        tabs = new javax.swing.JTabbedPane();
-        inputField = new javax.swing.JTextField();
-        jButtonSearch = new javax.swing.JButton();
+        jTextFieldInput = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jListEntry = new javax.swing.JList();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextPaneDefinition = new javax.swing.JTextPane();
+        jButtonAdd = new javax.swing.JButton();
+        jButtonEdit = new javax.swing.JButton();
+        jButtonRemove = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         itemManageDictionaries = new javax.swing.JMenuItem();
@@ -52,21 +52,45 @@ public class JFrameMain extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        inputField.setMaximumSize(new java.awt.Dimension(200, 2147483647));
-        inputField.setMinimumSize(new java.awt.Dimension(200, 20));
-        inputField.addKeyListener(new java.awt.event.KeyAdapter() {
+        jTextFieldInput.setMinimumSize(new java.awt.Dimension(100, 20));
+        jTextFieldInput.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                inputFieldKeyReleased(evt);
+                jTextFieldInputKeyReleased(evt);
             }
         });
 
-        jButtonSearch.setText("Search");
-        jButtonSearch.setToolTipText("");
-        jButtonSearch.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonSearchActionPerformed(evt);
+        jListEntry.setFixedCellHeight(20);
+        jListEntry.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jListEntryMouseClicked(evt);
             }
         });
+        jScrollPane1.setViewportView(jListEntry);
+
+        jScrollPane2.setViewportView(jTextPaneDefinition);
+
+        jButtonAdd.setText("Add");
+        jButtonAdd.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonAddMouseClicked(evt);
+            }
+        });
+
+        jButtonEdit.setText("Edit");
+        jButtonEdit.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonEditMouseClicked(evt);
+            }
+        });
+
+        jButtonRemove.setText("Remove");
+        jButtonRemove.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonRemoveMouseClicked(evt);
+            }
+        });
+
+        jLabel1.setText("Search:");
 
         jMenu1.setText("Tools");
 
@@ -84,47 +108,87 @@ public class JFrameMain extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tabs)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(inputField, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonSearch)
-                .addContainerGap(423, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextFieldInput, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButtonAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonRemove, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 154, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(inputField, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonSearch))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(tabs, javax.swing.GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE)
+                    .addComponent(jTextFieldInput, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonAdd)
+                    .addComponent(jButtonEdit)
+                    .addComponent(jButtonRemove)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButtonSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSearchActionPerformed
+    private void jTextFieldInputKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldInputKeyReleased
         // TODO add your handling code here:
+        int index = this.dict.find(this.jTextFieldInput.getText());
+        if (index >= 0) {
+            this.jListEntry.setSelectedIndex(index);
+            this.jListEntry.ensureIndexIsVisible(index);
+            this.jScrollPane1.getVerticalScrollBar().setValue(index * this.jListEntry.getFixedCellHeight());
+        }
+    }//GEN-LAST:event_jTextFieldInputKeyReleased
 
-    }//GEN-LAST:event_jButtonSearchActionPerformed
-
-    private void inputFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_inputFieldKeyReleased
+    private void jListEntryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jListEntryMouseClicked
         // TODO add your handling code here:
+        this.jTextPaneDefinition.setText(this.dict.getDefinition(this.jListEntry.getSelectedIndex()));
+    }//GEN-LAST:event_jListEntryMouseClicked
 
-    }//GEN-LAST:event_inputFieldKeyReleased
+    private void jButtonAddMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonAddMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonAddMouseClicked
+
+    private void jButtonEditMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonEditMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonEditMouseClicked
+
+    private void jButtonRemoveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonRemoveMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonRemoveMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField inputField;
     private javax.swing.JMenuItem itemManageDictionaries;
-    private javax.swing.JButton jButtonSearch;
+    private javax.swing.JButton jButtonAdd;
+    private javax.swing.JButton jButtonEdit;
+    private javax.swing.JButton jButtonRemove;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JList jListEntry;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JTabbedPane tabs;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextField jTextFieldInput;
+    private javax.swing.JTextPane jTextPaneDefinition;
     // End of variables declaration//GEN-END:variables
 }
