@@ -5,6 +5,9 @@
  */
 package vnu.geoterms.ui;
 
+import java.awt.AWTEventMulticaster;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyListener;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import vnu.geoterms.storage.jspd.*;
@@ -15,9 +18,9 @@ import vnu.geoterms.storage.jspd.*;
  */
 public class JFrameMain extends javax.swing.JFrame {
 
-    private Dictionary dictionary;
-
-    private String const_dictionary_file = "vnu_geoterms_demo.jspd";
+    private DictionarySPDict dictionary;
+    private String const_dictionary_file = "AnhViet.jspd";
+    private String const_home_page_string = "<html><head></head><body><h1>Welcome to VNU-Geoterms</h1>This is the 2st demo version of VNU-Geotems.<h2>Author</h2>CVPR group, Faculty of Information Technology, Ho Chi Minh City University of Science.</body></html>";
 
     /**
      * Creates new form JFrameMain
@@ -25,10 +28,14 @@ public class JFrameMain extends javax.swing.JFrame {
     public JFrameMain() {
         initComponents();
 
-        //this.tabs.addTab("My dictionary", jpd);
-        this.dictionary = new Dictionary(const_dictionary_file);
+        this.dictionary = new DictionarySPDict(const_dictionary_file);
         this.jListEntry.setModel(dictionary.getModel());
         //jpd.getMatches().add(null, jpd)
+        this.jComboBoxInputEntries.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jComboBoxInputEntriesKeyReleased(evt);
+            }
+        });
     }
 
     /**
@@ -40,29 +47,63 @@ public class JFrameMain extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTextFieldInput = new javax.swing.JTextField();
+        jToolBar1 = new javax.swing.JToolBar();
+        jButtonBack = new javax.swing.JButton();
+        jButtonForward = new javax.swing.JButton();
+        jComboBoxInputEntries = new javax.swing.JComboBox();
+        jSplitPane1 = new javax.swing.JSplitPane();
+        jPanel2 = new javax.swing.JPanel();
         jScrollPaneEntry = new javax.swing.JScrollPane();
         jListEntry = new javax.swing.JList();
-        jScrollPaneDefinition = new javax.swing.JScrollPane();
+        jToolBar2 = new javax.swing.JToolBar();
+        jButtonAddEntry = new javax.swing.JButton();
+        jButtonEditEntry = new javax.swing.JButton();
+        jButtonDeleteEntry = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jToolBar3 = new javax.swing.JToolBar();
+        jButtonCopyDefinition = new javax.swing.JButton();
+        jButtonSaveDefinition = new javax.swing.JButton();
+        jButtonPrintDefinition = new javax.swing.JButton();
+        jButtonFindInDefinition = new javax.swing.JButton();
+        jButtonHomePage = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
         jTextPaneDefinition = new javax.swing.JTextPane();
-        jButtonInsert = new javax.swing.JButton();
-        jButtonEdit = new javax.swing.JButton();
-        jButtonRemove = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        itemManageDictionaries = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        jMenuTools = new javax.swing.JMenu();
+        jMenuItemManageDictionaries = new javax.swing.JMenuItem();
+        jMenuItemOptions = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        jMenuItemExit = new javax.swing.JMenuItem();
+        jMenuHelp = new javax.swing.JMenu();
+        jMenuItemHelpContents = new javax.swing.JMenuItem();
+        jMenuItemAbout = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("VNU - Geoterms - 1st Demo");
+        setTitle("VNU - Geoterms - 2st Demo");
+        setPreferredSize(new java.awt.Dimension(800, 600));
 
-        jTextFieldInput.setMinimumSize(new java.awt.Dimension(100, 20));
-        jTextFieldInput.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jTextFieldInputKeyReleased(evt);
-            }
-        });
+        jToolBar1.setFloatable(false);
+        jToolBar1.setRollover(true);
+
+        jButtonBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/toolbarButtonGraphics/navigation/Back16.gif"))); // NOI18N
+        jButtonBack.setToolTipText("Go back");
+        jButtonBack.setFocusable(false);
+        jButtonBack.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonBack.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButtonBack);
+
+        jButtonForward.setIcon(new javax.swing.ImageIcon(getClass().getResource("/toolbarButtonGraphics/navigation/Forward16.gif"))); // NOI18N
+        jButtonForward.setToolTipText("Go forward");
+        jButtonForward.setFocusable(false);
+        jButtonForward.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonForward.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButtonForward);
+
+        jComboBoxInputEntries.setEditable(true);
+        jComboBoxInputEntries.setToolTipText("");
+        jToolBar1.add(jComboBoxInputEntries);
+
+        jSplitPane1.setDividerLocation(150);
 
         jListEntry.setFixedCellHeight(20);
         jListEntry.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -72,40 +113,152 @@ public class JFrameMain extends javax.swing.JFrame {
         });
         jScrollPaneEntry.setViewportView(jListEntry);
 
-        jScrollPaneDefinition.setViewportView(jTextPaneDefinition);
+        jToolBar2.setFloatable(false);
+        jToolBar2.setRollover(true);
 
-        jButtonInsert.setText("Insert");
-        jButtonInsert.addMouseListener(new java.awt.event.MouseAdapter() {
+        jButtonAddEntry.setIcon(new javax.swing.ImageIcon(getClass().getResource("/toolbarButtonGraphics/general/Add16.gif"))); // NOI18N
+        jButtonAddEntry.setToolTipText("Add new entry");
+        jButtonAddEntry.setFocusable(false);
+        jButtonAddEntry.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonAddEntry.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonAddEntry.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButtonInsertMouseClicked(evt);
+                jButtonAddEntryMouseClicked(evt);
             }
         });
+        jToolBar2.add(jButtonAddEntry);
 
-        jButtonEdit.setText("Edit");
-        jButtonEdit.addMouseListener(new java.awt.event.MouseAdapter() {
+        jButtonEditEntry.setIcon(new javax.swing.ImageIcon(getClass().getResource("/toolbarButtonGraphics/general/Edit16.gif"))); // NOI18N
+        jButtonEditEntry.setToolTipText("Edit current entry's definition");
+        jButtonEditEntry.setFocusable(false);
+        jButtonEditEntry.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonEditEntry.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonEditEntry.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButtonEditMouseClicked(evt);
+                jButtonEditEntryMouseClicked(evt);
             }
         });
+        jToolBar2.add(jButtonEditEntry);
 
-        jButtonRemove.setText("Remove");
-        jButtonRemove.addMouseListener(new java.awt.event.MouseAdapter() {
+        jButtonDeleteEntry.setIcon(new javax.swing.ImageIcon(getClass().getResource("/toolbarButtonGraphics/general/Delete16.gif"))); // NOI18N
+        jButtonDeleteEntry.setToolTipText("Delete current entry");
+        jButtonDeleteEntry.setFocusable(false);
+        jButtonDeleteEntry.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonDeleteEntry.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonDeleteEntry.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButtonRemoveMouseClicked(evt);
+                jButtonDeleteEntryMouseClicked(evt);
             }
         });
+        jToolBar2.add(jButtonDeleteEntry);
 
-        jLabel1.setText("Search:");
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jToolBar2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
+            .addComponent(jScrollPaneEntry, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPaneEntry, javax.swing.GroupLayout.DEFAULT_SIZE, 504, Short.MAX_VALUE))
+        );
 
-        jMenu1.setText("Tools");
+        jSplitPane1.setLeftComponent(jPanel2);
 
-        itemManageDictionaries.setText("Manage Dictionaries");
-        jMenu1.add(itemManageDictionaries);
+        jToolBar3.setFloatable(false);
+        jToolBar3.setRollover(true);
 
-        jMenuBar1.add(jMenu1);
+        jButtonCopyDefinition.setIcon(new javax.swing.ImageIcon(getClass().getResource("/toolbarButtonGraphics/general/Copy16.gif"))); // NOI18N
+        jButtonCopyDefinition.setToolTipText("Copy");
+        jButtonCopyDefinition.setFocusable(false);
+        jButtonCopyDefinition.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonCopyDefinition.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar3.add(jButtonCopyDefinition);
 
-        jMenu2.setText("Help");
-        jMenuBar1.add(jMenu2);
+        jButtonSaveDefinition.setIcon(new javax.swing.ImageIcon(getClass().getResource("/toolbarButtonGraphics/general/Save16.gif"))); // NOI18N
+        jButtonSaveDefinition.setToolTipText("Save");
+        jButtonSaveDefinition.setFocusable(false);
+        jButtonSaveDefinition.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonSaveDefinition.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar3.add(jButtonSaveDefinition);
+
+        jButtonPrintDefinition.setIcon(new javax.swing.ImageIcon(getClass().getResource("/toolbarButtonGraphics/general/Print16.gif"))); // NOI18N
+        jButtonPrintDefinition.setToolTipText("Print");
+        jButtonPrintDefinition.setFocusable(false);
+        jButtonPrintDefinition.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonPrintDefinition.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar3.add(jButtonPrintDefinition);
+
+        jButtonFindInDefinition.setIcon(new javax.swing.ImageIcon(getClass().getResource("/toolbarButtonGraphics/general/Find16.gif"))); // NOI18N
+        jButtonFindInDefinition.setToolTipText("Find ");
+        jButtonFindInDefinition.setFocusable(false);
+        jButtonFindInDefinition.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonFindInDefinition.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar3.add(jButtonFindInDefinition);
+
+        jButtonHomePage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/toolbarButtonGraphics/navigation/Home16.gif"))); // NOI18N
+        jButtonHomePage.setToolTipText("Go to home page");
+        jButtonHomePage.setFocusable(false);
+        jButtonHomePage.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonHomePage.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonHomePage.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonHomePageMouseClicked(evt);
+            }
+        });
+        jToolBar3.add(jButtonHomePage);
+
+        jTextPaneDefinition.setEditable(false);
+        jTextPaneDefinition.setContentType("text/html"); // NOI18N
+        jTextPaneDefinition.setText("<html>\r\n\t<head>\r\n\t</head>\r\n\t<body>\r\n\t\t<h1>Welcome to VNU-Geoterms</h1>\n\t\tThis is the 2st demo version of VNU-Geotems.\n\t\t<h2>Author</h2>\n\t\tCVPR group, Faculty of Information Technology, Ho Chi Minh City University of Science.\n\t</body>\r\n</html>\r ");
+        jTextPaneDefinition.setToolTipText("");
+        jScrollPane3.setViewportView(jTextPaneDefinition);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jToolBar3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 644, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jToolBar3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 504, Short.MAX_VALUE))
+        );
+
+        jSplitPane1.setRightComponent(jPanel1);
+
+        jMenuTools.setText("Tools");
+        jMenuTools.setToolTipText("");
+
+        jMenuItemManageDictionaries.setText("Manage Dictionaries");
+        jMenuTools.add(jMenuItemManageDictionaries);
+
+        jMenuItemOptions.setText("Options");
+        jMenuTools.add(jMenuItemOptions);
+        jMenuTools.add(jSeparator1);
+
+        jMenuItemExit.setText("Exit");
+        jMenuTools.add(jMenuItemExit);
+
+        jMenuBar1.add(jMenuTools);
+
+        jMenuHelp.setText("Help");
+
+        jMenuItemHelpContents.setText("Help contents");
+        jMenuHelp.add(jMenuItemHelpContents);
+
+        jMenuItemAbout.setText("About");
+        jMenuHelp.add(jMenuItemAbout);
+
+        jMenuBar1.add(jMenuHelp);
 
         setJMenuBar(jMenuBar1);
 
@@ -113,70 +266,40 @@ public class JFrameMain extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jScrollPaneEntry, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextFieldInput, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButtonInsert, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonRemove, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 154, Short.MAX_VALUE))
-                    .addComponent(jScrollPaneDefinition))
-                .addContainerGap())
+            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldInput, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonInsert)
-                    .addComponent(jButtonEdit)
-                    .addComponent(jButtonRemove)
-                    .addComponent(jLabel1))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPaneDefinition)
-                    .addComponent(jScrollPaneEntry, javax.swing.GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE))
+                .addComponent(jSplitPane1)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextFieldInputKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldInputKeyReleased
+    private void jButtonHomePageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonHomePageMouseClicked
         // TODO add your handling code here:
-        int index = this.dictionary.find(this.jTextFieldInput.getText());
-        if (index >= 0) {
-            this.jListEntry.setSelectedIndex(index);
-            this.jListEntry.ensureIndexIsVisible(index);
-            this.jScrollPaneEntry.getVerticalScrollBar().setValue(index * this.jListEntry.getFixedCellHeight());
-        }
-    }//GEN-LAST:event_jTextFieldInputKeyReleased
+        this.jTextPaneDefinition.setText(const_home_page_string);
+    }//GEN-LAST:event_jButtonHomePageMouseClicked
 
     private void jListEntryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jListEntryMouseClicked
         // TODO add your handling code here:
         this.jTextPaneDefinition.setText(this.dictionary.getDefinition(this.jListEntry.getSelectedIndex()));
     }//GEN-LAST:event_jListEntryMouseClicked
 
-    private void jButtonInsertMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonInsertMouseClicked
+    private void jButtonAddEntryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonAddEntryMouseClicked
         // TODO add your handling code here:
         JDialog jDialog = new JDialogInsert(this, true, this.dictionary);
         jDialog.setLocationRelativeTo(this);
         jDialog.setVisible(true);
         jDialog = null;
-    }//GEN-LAST:event_jButtonInsertMouseClicked
+    }//GEN-LAST:event_jButtonAddEntryMouseClicked
 
-    private void jButtonEditMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonEditMouseClicked
+    private void jButtonEditEntryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonEditEntryMouseClicked
         // TODO add your handling code here:
         int index = this.jListEntry.getSelectedIndex();
         if (index == -1) {
@@ -187,9 +310,9 @@ public class JFrameMain extends javax.swing.JFrame {
         jDialog.setLocationRelativeTo(this);
         jDialog.setVisible(true);
         jDialog = null;
-    }//GEN-LAST:event_jButtonEditMouseClicked
+    }//GEN-LAST:event_jButtonEditEntryMouseClicked
 
-    private void jButtonRemoveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonRemoveMouseClicked
+    private void jButtonDeleteEntryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonDeleteEntryMouseClicked
         // TODO add your handling code here:
         int index = this.jListEntry.getSelectedIndex();
         if (index == -1) {
@@ -200,22 +323,49 @@ public class JFrameMain extends javax.swing.JFrame {
         if (result == -1) {
             JOptionPane.showMessageDialog(this, "An error has occurred when you remove your entry.");
         }
-    }//GEN-LAST:event_jButtonRemoveMouseClicked
+    }//GEN-LAST:event_jButtonDeleteEntryMouseClicked
 
+    private void jComboBoxInputEntriesKeyReleased(java.awt.event.KeyEvent evt) {
+        // TODO add your handling code here:
+        int index = this.dictionary.find(((javax.swing.JTextField) this.jComboBoxInputEntries.getEditor().getEditorComponent()).getText());
+        System.out.println(index);
+        if (index >= 0) {
+            this.jListEntry.setSelectedIndex(index);
+            this.jListEntry.ensureIndexIsVisible(index);
+            this.jScrollPaneEntry.getVerticalScrollBar().setValue(index * this.jListEntry.getFixedCellHeight());
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenuItem itemManageDictionaries;
-    private javax.swing.JButton jButtonEdit;
-    private javax.swing.JButton jButtonInsert;
-    private javax.swing.JButton jButtonRemove;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton jButtonAddEntry;
+    private javax.swing.JButton jButtonBack;
+    private javax.swing.JButton jButtonCopyDefinition;
+    private javax.swing.JButton jButtonDeleteEntry;
+    private javax.swing.JButton jButtonEditEntry;
+    private javax.swing.JButton jButtonFindInDefinition;
+    private javax.swing.JButton jButtonForward;
+    private javax.swing.JButton jButtonHomePage;
+    private javax.swing.JButton jButtonPrintDefinition;
+    private javax.swing.JButton jButtonSaveDefinition;
+    private javax.swing.JComboBox jComboBoxInputEntries;
     private javax.swing.JList jListEntry;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JScrollPane jScrollPaneDefinition;
+    private javax.swing.JMenu jMenuHelp;
+    private javax.swing.JMenuItem jMenuItemAbout;
+    private javax.swing.JMenuItem jMenuItemExit;
+    private javax.swing.JMenuItem jMenuItemHelpContents;
+    private javax.swing.JMenuItem jMenuItemManageDictionaries;
+    private javax.swing.JMenuItem jMenuItemOptions;
+    private javax.swing.JMenu jMenuTools;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPaneEntry;
-    private javax.swing.JTextField jTextFieldInput;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
+    private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JTextPane jTextPaneDefinition;
+    private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JToolBar jToolBar2;
+    private javax.swing.JToolBar jToolBar3;
     // End of variables declaration//GEN-END:variables
 }
