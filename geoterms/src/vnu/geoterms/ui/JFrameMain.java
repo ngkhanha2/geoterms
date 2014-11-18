@@ -56,9 +56,9 @@ public class JFrameMain extends javax.swing.JFrame {
         jScrollPaneEntry = new javax.swing.JScrollPane();
         jListEntry = new javax.swing.JList();
         jToolBar2 = new javax.swing.JToolBar();
-        jButtonAddEntry = new javax.swing.JButton();
+        jButtonInsertEntry = new javax.swing.JButton();
         jButtonEditEntry = new javax.swing.JButton();
-        jButtonDeleteEntry = new javax.swing.JButton();
+        jButtonRemoveEntry = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jToolBar3 = new javax.swing.JToolBar();
         jButtonCopyDefinition = new javax.swing.JButton();
@@ -80,7 +80,6 @@ public class JFrameMain extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("VNU - Geoterms - 2st Demo");
-        setPreferredSize(new java.awt.Dimension(800, 600));
 
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
@@ -116,17 +115,17 @@ public class JFrameMain extends javax.swing.JFrame {
         jToolBar2.setFloatable(false);
         jToolBar2.setRollover(true);
 
-        jButtonAddEntry.setIcon(new javax.swing.ImageIcon(getClass().getResource("/toolbarButtonGraphics/general/Add16.gif"))); // NOI18N
-        jButtonAddEntry.setToolTipText("Add new entry");
-        jButtonAddEntry.setFocusable(false);
-        jButtonAddEntry.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButtonAddEntry.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButtonAddEntry.addMouseListener(new java.awt.event.MouseAdapter() {
+        jButtonInsertEntry.setIcon(new javax.swing.ImageIcon(getClass().getResource("/toolbarButtonGraphics/general/Add16.gif"))); // NOI18N
+        jButtonInsertEntry.setToolTipText("Add new entry");
+        jButtonInsertEntry.setFocusable(false);
+        jButtonInsertEntry.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonInsertEntry.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonInsertEntry.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButtonAddEntryMouseClicked(evt);
+                jButtonInsertEntryMouseClicked(evt);
             }
         });
-        jToolBar2.add(jButtonAddEntry);
+        jToolBar2.add(jButtonInsertEntry);
 
         jButtonEditEntry.setIcon(new javax.swing.ImageIcon(getClass().getResource("/toolbarButtonGraphics/general/Edit16.gif"))); // NOI18N
         jButtonEditEntry.setToolTipText("Edit current entry's definition");
@@ -140,17 +139,17 @@ public class JFrameMain extends javax.swing.JFrame {
         });
         jToolBar2.add(jButtonEditEntry);
 
-        jButtonDeleteEntry.setIcon(new javax.swing.ImageIcon(getClass().getResource("/toolbarButtonGraphics/general/Delete16.gif"))); // NOI18N
-        jButtonDeleteEntry.setToolTipText("Delete current entry");
-        jButtonDeleteEntry.setFocusable(false);
-        jButtonDeleteEntry.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButtonDeleteEntry.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButtonDeleteEntry.addMouseListener(new java.awt.event.MouseAdapter() {
+        jButtonRemoveEntry.setIcon(new javax.swing.ImageIcon(getClass().getResource("/toolbarButtonGraphics/general/Delete16.gif"))); // NOI18N
+        jButtonRemoveEntry.setToolTipText("Delete current entry");
+        jButtonRemoveEntry.setFocusable(false);
+        jButtonRemoveEntry.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonRemoveEntry.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonRemoveEntry.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButtonDeleteEntryMouseClicked(evt);
+                jButtonRemoveEntryMouseClicked(evt);
             }
         });
-        jToolBar2.add(jButtonDeleteEntry);
+        jToolBar2.add(jButtonRemoveEntry);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -239,6 +238,11 @@ public class JFrameMain extends javax.swing.JFrame {
         jMenuTools.setToolTipText("");
 
         jMenuItemManageDictionaries.setText("Manage Dictionaries");
+        jMenuItemManageDictionaries.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemManageDictionariesActionPerformed(evt);
+            }
+        });
         jMenuTools.add(jMenuItemManageDictionaries);
 
         jMenuItemOptions.setText("Options");
@@ -246,6 +250,11 @@ public class JFrameMain extends javax.swing.JFrame {
         jMenuTools.add(jSeparator1);
 
         jMenuItemExit.setText("Exit");
+        jMenuItemExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemExitActionPerformed(evt);
+            }
+        });
         jMenuTools.add(jMenuItemExit);
 
         jMenuBar1.add(jMenuTools);
@@ -256,6 +265,11 @@ public class JFrameMain extends javax.swing.JFrame {
         jMenuHelp.add(jMenuItemHelpContents);
 
         jMenuItemAbout.setText("About");
+        jMenuItemAbout.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenuItemAboutMouseClicked(evt);
+            }
+        });
         jMenuHelp.add(jMenuItemAbout);
 
         jMenuBar1.add(jMenuHelp);
@@ -291,13 +305,13 @@ public class JFrameMain extends javax.swing.JFrame {
         this.jTextPaneDefinition.setText(this.dictionary.getDefinition(this.jListEntry.getSelectedIndex()));
     }//GEN-LAST:event_jListEntryMouseClicked
 
-    private void jButtonAddEntryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonAddEntryMouseClicked
+    private void jButtonInsertEntryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonInsertEntryMouseClicked
         // TODO add your handling code here:
         JDialog jDialog = new JDialogInsert(this, true, this.dictionary);
         jDialog.setLocationRelativeTo(this);
         jDialog.setVisible(true);
         jDialog = null;
-    }//GEN-LAST:event_jButtonAddEntryMouseClicked
+    }//GEN-LAST:event_jButtonInsertEntryMouseClicked
 
     private void jButtonEditEntryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonEditEntryMouseClicked
         // TODO add your handling code here:
@@ -312,23 +326,39 @@ public class JFrameMain extends javax.swing.JFrame {
         jDialog = null;
     }//GEN-LAST:event_jButtonEditEntryMouseClicked
 
-    private void jButtonDeleteEntryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonDeleteEntryMouseClicked
+    private void jButtonRemoveEntryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonRemoveEntryMouseClicked
         // TODO add your handling code here:
         int index = this.jListEntry.getSelectedIndex();
         if (index == -1) {
             JOptionPane.showMessageDialog(this, "Oop! You must choose an entry.");
             return;
         }
-        int result = this.dictionary.remove(index);
-        if (result == -1) {
-            JOptionPane.showMessageDialog(this, "An error has occurred when you remove your entry.");
-        }
-    }//GEN-LAST:event_jButtonDeleteEntryMouseClicked
+        JDialog jDialog = new JDialogRemove(this, true, this.dictionary, index);
+        jDialog.setLocationRelativeTo(this);
+        jDialog.setVisible(true);
+        jDialog = null;
+    }//GEN-LAST:event_jButtonRemoveEntryMouseClicked
+
+    private void jMenuItemAboutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItemAboutMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItemAboutMouseClicked
+
+    private void jMenuItemManageDictionariesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemManageDictionariesActionPerformed
+        // TODO add your handling code here:
+        JDialog jDialog = new JDialogDictionariesManagement(this, true);
+        jDialog.setLocationRelativeTo(this);
+        jDialog.setVisible(true);
+        jDialog = null;
+    }//GEN-LAST:event_jMenuItemManageDictionariesActionPerformed
+
+    private void jMenuItemExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemExitActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jMenuItemExitActionPerformed
 
     private void jComboBoxInputEntriesKeyReleased(java.awt.event.KeyEvent evt) {
         // TODO add your handling code here:
         int index = this.dictionary.find(((javax.swing.JTextField) this.jComboBoxInputEntries.getEditor().getEditorComponent()).getText());
-        System.out.println(index);
         if (index >= 0) {
             this.jListEntry.setSelectedIndex(index);
             this.jListEntry.ensureIndexIsVisible(index);
@@ -337,15 +367,15 @@ public class JFrameMain extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonAddEntry;
     private javax.swing.JButton jButtonBack;
     private javax.swing.JButton jButtonCopyDefinition;
-    private javax.swing.JButton jButtonDeleteEntry;
     private javax.swing.JButton jButtonEditEntry;
     private javax.swing.JButton jButtonFindInDefinition;
     private javax.swing.JButton jButtonForward;
     private javax.swing.JButton jButtonHomePage;
+    private javax.swing.JButton jButtonInsertEntry;
     private javax.swing.JButton jButtonPrintDefinition;
+    private javax.swing.JButton jButtonRemoveEntry;
     private javax.swing.JButton jButtonSaveDefinition;
     private javax.swing.JComboBox jComboBoxInputEntries;
     private javax.swing.JList jListEntry;

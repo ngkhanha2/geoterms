@@ -5,7 +5,6 @@
  */
 package vnu.geoterms;
 
-import java.util.*;
 import javax.swing.UIManager;
 import vnu.geoterms.ui.JFrameMain;
 

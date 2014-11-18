@@ -28,22 +28,82 @@ public class JDialogDictionariesManagement extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jToolBar1 = new javax.swing.JToolBar();
+        jButtonAddDictionary = new javax.swing.JButton();
+        jButtonRemoveDictionary = new javax.swing.JButton();
+        jButtonGetDictionaryProperties = new javax.swing.JButton();
+        jButtonMoveUp = new javax.swing.JButton();
+        jButtonMoveDown = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jListDictionary = new javax.swing.JList();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Manage Dictionaries");
+        setResizable(false);
+
+        jToolBar1.setFloatable(false);
+        jToolBar1.setRollover(true);
+
+        jButtonAddDictionary.setIcon(new javax.swing.ImageIcon(getClass().getResource("/toolbarButtonGraphics/general/Add16.gif"))); // NOI18N
+        jButtonAddDictionary.setFocusable(false);
+        jButtonAddDictionary.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonAddDictionary.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButtonAddDictionary);
+
+        jButtonRemoveDictionary.setIcon(new javax.swing.ImageIcon(getClass().getResource("/toolbarButtonGraphics/general/Delete16.gif"))); // NOI18N
+        jButtonRemoveDictionary.setFocusable(false);
+        jButtonRemoveDictionary.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonRemoveDictionary.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButtonRemoveDictionary);
+
+        jButtonGetDictionaryProperties.setIcon(new javax.swing.ImageIcon(getClass().getResource("/toolbarButtonGraphics/general/Properties16.gif"))); // NOI18N
+        jButtonGetDictionaryProperties.setFocusable(false);
+        jButtonGetDictionaryProperties.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonGetDictionaryProperties.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButtonGetDictionaryProperties);
+
+        jButtonMoveUp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/toolbarButtonGraphics/navigation/Up16.gif"))); // NOI18N
+        jButtonMoveUp.setToolTipText("");
+        jButtonMoveUp.setFocusable(false);
+        jButtonMoveUp.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonMoveUp.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButtonMoveUp);
+
+        jButtonMoveDown.setIcon(new javax.swing.ImageIcon(getClass().getResource("/toolbarButtonGraphics/navigation/Down16.gif"))); // NOI18N
+        jButtonMoveDown.setFocusable(false);
+        jButtonMoveDown.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonMoveDown.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButtonMoveDown);
+
+        jScrollPane1.setViewportView(jListDictionary);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonAddDictionary;
+    private javax.swing.JButton jButtonGetDictionaryProperties;
+    private javax.swing.JButton jButtonMoveDown;
+    private javax.swing.JButton jButtonMoveUp;
+    private javax.swing.JButton jButtonRemoveDictionary;
+    private javax.swing.JList jListDictionary;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
 }
