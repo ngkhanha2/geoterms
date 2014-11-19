@@ -5,15 +5,11 @@
  */
 package vnu.geoterms.core.Interface;
 
-import javax.swing.ListModel;
-
 /**
  *
  * @author Khanh
  */
 public interface IDictionary {
-
-    ListModel getModel();
 
     int insert(String entry, String definition);
 
@@ -27,9 +23,15 @@ public interface IDictionary {
 
     int find(String entry);
 
+    String getName();
+
     String getEntry(int index);
 
     String getDefinition(int index);
+
+    String getHTMLDivDefinition(int index);
+
+    void syncronize(IEntries entries);
 
     void close();
 }
