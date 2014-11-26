@@ -14,7 +14,7 @@ import vnu.geoterms.core.Interface.*;
  * @author Khanh
  */
 public class JFrameMain extends javax.swing.JFrame {
-    
+
     private String const_home_page_string = "<html><head></head><body><h1>Welcome to VNU-Geoterms</h1>This is the 2nd demo version of VNU-Geotems.<h2>Author</h2>CVPR group, Faculty of Information Technology, Ho Chi Minh City University of Science.</body></html>";
     private IManagement management;
 
@@ -25,19 +25,13 @@ public class JFrameMain extends javax.swing.JFrame {
      */
     public JFrameMain(IManagement management) {
         initComponents();
-        
-        this.management = management;
 
-        //this.dictionary = new DictionarySPDict(const_dictionary_file);
-        this.jListEntry.setModel(management.getListModelEntries());
-        //jpd.getMatches().add(null, jpd)
+        this.management = management;
         this.jComboBoxInputEntries.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jComboBoxInputEntriesKeyReleased(evt);
             }
         });
-        this.jComboBoxLanguages.setModel(new DefaultComboBoxModel(((DefaultListModel<String>) management.getListModelLanguages()).toArray()));
-        this.jComboBoxLanguages.setSelectedItem(management.getLanguage());
     }
 
     /**
@@ -60,9 +54,6 @@ public class JFrameMain extends javax.swing.JFrame {
         jScrollPaneEntry = new javax.swing.JScrollPane();
         jListEntry = new javax.swing.JList();
         jToolBar2 = new javax.swing.JToolBar();
-        jLabel1 = new javax.swing.JLabel();
-        jComboBoxLanguages = new javax.swing.JComboBox();
-        jSeparator2 = new javax.swing.JToolBar.Separator();
         jButtonInsertEntry = new javax.swing.JButton();
         jButtonEditEntry = new javax.swing.JButton();
         jButtonRemoveEntry = new javax.swing.JButton();
@@ -134,21 +125,6 @@ public class JFrameMain extends javax.swing.JFrame {
         jToolBar2.setFloatable(false);
         jToolBar2.setRollover(true);
 
-        jLabel1.setText("Language:");
-        jLabel1.setToolTipText("");
-        jToolBar2.add(jLabel1);
-
-        jComboBoxLanguages.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "vi" }));
-        jComboBoxLanguages.setMaximumSize(new java.awt.Dimension(60, 32767));
-        jComboBoxLanguages.setMinimumSize(new java.awt.Dimension(60, 20));
-        jComboBoxLanguages.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBoxLanguagesActionPerformed(evt);
-            }
-        });
-        jToolBar2.add(jComboBoxLanguages);
-        jToolBar2.add(jSeparator2);
-
         jButtonInsertEntry.setIcon(new javax.swing.ImageIcon(getClass().getResource("/toolbarButtonGraphics/general/Add16.gif"))); // NOI18N
         jButtonInsertEntry.setToolTipText("Add new entry");
         jButtonInsertEntry.setFocusable(false);
@@ -197,7 +173,7 @@ public class JFrameMain extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPaneEntry, javax.swing.GroupLayout.PREFERRED_SIZE, 504, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jScrollPaneEntry, javax.swing.GroupLayout.DEFAULT_SIZE, 535, Short.MAX_VALUE))
         );
 
         jSplitPane1.setLeftComponent(jPanel2);
@@ -336,7 +312,7 @@ public class JFrameMain extends javax.swing.JFrame {
 
     private void jListEntryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jListEntryMouseClicked
         // TODO add your handling code here:
-        this.jTextPaneDefinition.setText(this.management.getEntryHTMLDefinition(this.jListEntry.getSelectedIndex()));
+        this.jTextPaneDefinition.setText(this.management.getEntryHTMLDefinition((String) this.jListEntry.getSelectedValue()));
     }//GEN-LAST:event_jListEntryMouseClicked
 
     private void jButtonInsertEntryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonInsertEntryMouseClicked
@@ -394,19 +370,16 @@ public class JFrameMain extends javax.swing.JFrame {
         jDialog = null;
     }//GEN-LAST:event_jMenuItemAboutActionPerformed
 
-    private void jComboBoxLanguagesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxLanguagesActionPerformed
-        // TODO add your handling code here:
-        this.management.setLanguage((String) this.jComboBoxLanguages.getSelectedItem());
-    }//GEN-LAST:event_jComboBoxLanguagesActionPerformed
-    
     private void jComboBoxInputEntriesKeyReleased(java.awt.event.KeyEvent evt) {
         // TODO add your handling code here:
-        int index = this.management.findEntry(((javax.swing.JTextField) this.jComboBoxInputEntries.getEditor().getEditorComponent()).getText());
-        if (index >= 0) {
-            this.jListEntry.setSelectedIndex(index);
-            this.jListEntry.ensureIndexIsVisible(index);
-            this.jScrollPaneEntry.getVerticalScrollBar().setValue(index * this.jListEntry.getFixedCellHeight());
-        }
+        this.jListEntry.setModel(this.management.getListModelEntriesWithKey(((javax.swing.JTextField) this.jComboBoxInputEntries.getEditor().getEditorComponent()).getText()));
+        System.gc();
+//        int index = this.management.findEntry();
+//        if (index >= 0) {
+//            this.jListEntry.setSelectedIndex(index);
+//            this.jListEntry.ensureIndexIsVisible(index);
+//            this.jScrollPaneEntry.getVerticalScrollBar().setValue(index * this.jListEntry.getFixedCellHeight());
+//        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -423,8 +396,6 @@ public class JFrameMain extends javax.swing.JFrame {
     private javax.swing.JButton jButtonRemoveEntry;
     private javax.swing.JButton jButtonSaveDefinition;
     private javax.swing.JComboBox jComboBoxInputEntries;
-    private javax.swing.JComboBox jComboBoxLanguages;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JList jListEntry;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuHelp;
@@ -439,7 +410,6 @@ public class JFrameMain extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPaneEntry;
     private javax.swing.JPopupMenu.Separator jSeparator1;
-    private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JTextPane jTextPaneDefinition;
     private javax.swing.JToolBar jToolBar1;

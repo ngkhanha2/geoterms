@@ -50,7 +50,7 @@ public class Geoterms {
 
         final Management management = new Management();
         management.addDictionary(new DictionarySPDict(const_dictionary_anhviet_file));
-        management.addDictionary(new DictionarySPDict(const_dictionary_tdbkqs_file));
+//        management.addDictionary(new DictionarySPDict(const_dictionary_tdbkqs_file));
         management.addDictionary(new DictionarySPDict(const_dictionary_vietanh_file));
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {

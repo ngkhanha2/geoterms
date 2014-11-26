@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import vnu.geoterms.core.Interface.IEntries;
 import vnu.geoterms.core.storage.Dictionary;
 
 /**
@@ -41,6 +40,7 @@ public class DictionarySPDict extends Dictionary {
             this.raf = new RandomAccessFile(f, "rw");
             String title = new String(readBytesAtFileOffset(this.raf.getFilePointer(), 7), 0, 7, "UTF-8");
             if (!title.equals("2SPDict")) {
+                title = null;
                 return;
             }
 
@@ -56,6 +56,9 @@ public class DictionarySPDict extends Dictionary {
             this.listFileOffset = this.raf.getFilePointer();
             this.comparator = new Comparator(information[1]);
             this.entryQuantity = (int) (this.raf.length() - this.listFileOffset >> 2);
+
+            information = null;
+            title = null;
         } catch (Exception ex) {
 
         }
@@ -463,19 +466,12 @@ public class DictionarySPDict extends Dictionary {
     }
 
     @Override
-    public void syncronize(IEntries entries) {
-        for (int i = 0; i < this.entryQuantity; ++i) {
-            try {
-                changeFilePointerByListIndex(i);
-                entries.insert(readShortStringAtFilePointer());
-            } catch (IOException ex) {
-                Logger.getLogger(DictionarySPDict.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+    public String getName() {
+        return name;
     }
 
     @Override
-    public String getName() {
-        return name;
+    public int indexOf(String entry) {
+        return binarySearchExisting(entry);
     }
 }

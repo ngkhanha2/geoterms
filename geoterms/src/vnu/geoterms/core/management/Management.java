@@ -5,6 +5,8 @@
  */
 package vnu.geoterms.core.management;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import javax.swing.DefaultListModel;
 import vnu.geoterms.core.storage.*;
 import vnu.geoterms.core.Interface.*;
@@ -16,14 +18,13 @@ import javax.swing.ListModel;
  */
 public class Management implements IManagement {
 
-    private IEntries entries;
-    private IDictionaries dictionaries;
+    //private IDictionaries dictionaries;
     private DefaultListModel<String> listModelLanguages;
     private String language;
+    private ArrayList<IDictionary> dictionaries;
 
     public Management() {
-        this.entries = new Entries();
-        this.dictionaries = new Dictionaries();
+        this.dictionaries = new ArrayList<IDictionary>();
 
         this.listModelLanguages = new DefaultListModel<String>();
         this.listModelLanguages.addElement("en");
@@ -35,33 +36,22 @@ public class Management implements IManagement {
 
     @Override
     public ListModel getListModelDictionaries() {
-        return this.dictionaries.getListModel();
+        return null;
     }
 
-    @Override
-    public ListModel getListModelEntries() {
-        return this.entries.getListModel();
-    }
-
-    @Override
     public int insert(String entry, int dictionaryIndex) {
         return 0;
     }
 
     @Override
-    public int findEntry(String entry) {
-        return this.entries.find(entry);
-    }
-
-    @Override
-    public String getEntryHTMLDefinition(int index) {
+    public String getEntryHTMLDefinition(String entry) {
         String value = "<html><body><div>";
         int realIndex;
-        for (int i = 0; i < this.dictionaries.getDictionaries().size(); ++i) {
-            realIndex = this.dictionaries.getDictionaries().get(i).find((String) this.getListModelEntries().getElementAt(index));
+        for (int i = 0; i < this.dictionaries.size(); ++i) {
+            realIndex = this.dictionaries.get(i).find(entry);
             if (realIndex >= 0) {
-                value += "<div><b>" + this.dictionaries.getDictionaries().get(i).getName() + "</b><hr></div>";
-                value += this.dictionaries.getDictionaries().get(i).getHTMLDivDefinition(realIndex);
+                value += "<div><b>" + this.dictionaries.get(i).getName() + "</b><hr></div>";
+                value += this.dictionaries.get(i).getHTMLDivDefinition(realIndex);
                 value += "<div></div>";
             }
         }
@@ -70,25 +60,45 @@ public class Management implements IManagement {
     }
 
     @Override
-    public ListModel getListModelLanguages() {
-        return listModelLanguages;
+    public ListModel getListModelEntriesWithKey(String key) {
+        DefaultListModel listModel = new DefaultListModel();
+        listModel.clear();
+        if (!key.trim().isEmpty()) {
+            for (int i = 0; i < this.dictionaries.size(); ++i) {
+                int index = this.dictionaries.get(i).indexOf(key);
+                if (index == -1) {
+                    continue;
+                }
+                while (true) {
+                    String s = this.dictionaries.get(i).getEntry(index);
+                    if (s.startsWith(key)) {
+                        listModel.addElement(s);
+                    } else {
+                        break;
+                    }
+                    s = null;
+                    System.gc();
+                    ++index;
+                }
+            }
+        }
+        return listModel;
     }
 
     @Override
     public void addDictionary(IDictionary dictionary) {
         this.dictionaries.add(dictionary);
-        dictionary.syncronize(this.entries);
+        //dictionary.syncronize(this.entries);
     }
 
     @Override
-    public String getLanguage() {
+    public String getLocale() {
         return this.language;
     }
 
     @Override
-    public void setLanguage(String language) {
-        this.language = language;
-        this.entries.changeLanguage(language);
-
+    public void setLocale(String locale) {
+        this.language = locale;
+        //this.entries.changeLanguage(locale);
     }
 }

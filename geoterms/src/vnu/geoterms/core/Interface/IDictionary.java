@@ -23,6 +23,8 @@ public interface IDictionary {
 
     int find(String entry);
 
+    int indexOf(String entry);
+
     String getName();
 
     String getEntry(int index);
@@ -30,8 +32,6 @@ public interface IDictionary {
     String getDefinition(int index);
 
     String getHTMLDivDefinition(int index);
-
-    void syncronize(IEntries entries);
 
     void close();
 }

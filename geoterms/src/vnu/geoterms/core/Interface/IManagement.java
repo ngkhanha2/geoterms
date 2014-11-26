@@ -15,19 +15,13 @@ public interface IManagement {
 
     ListModel getListModelDictionaries();
 
-    ListModel getListModelEntries();
-
-    int insert(String entry, int dictionaryIndex);
-
-    int findEntry(String entry);
-
-    String getEntryHTMLDefinition(int index);
-
-    ListModel getListModelLanguages();
+    String getEntryHTMLDefinition(String entry);
 
     void addDictionary(IDictionary dictionary);
 
-    String getLanguage();
+    String getLocale();
 
-    void setLanguage(String currentLanguage);
+    void setLocale(String locale);
+
+    ListModel getListModelEntriesWithKey(String key);
 }
