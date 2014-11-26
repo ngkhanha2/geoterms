@@ -82,8 +82,12 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jToolBar1" alignment="0" max="32767" attributes="0"/>
-          <Component id="jSplitPane1" alignment="1" max="32767" attributes="0"/>
+          <Component id="jToolBar1" alignment="0" pref="799" max="32767" attributes="0"/>
+          <Group type="102" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jSplitPane1" pref="0" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -276,7 +280,7 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jToolBar3" alignment="0" max="32767" attributes="0"/>
-                  <Component id="jScrollPane3" alignment="1" pref="574" max="32767" attributes="0"/>
+                  <Component id="jScrollPane3" alignment="1" pref="549" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">

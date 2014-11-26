@@ -161,7 +161,7 @@ public class DictionarySPDict extends Dictionary {
         int mid;
         while (left <= right) {
             mid = (left + right) >> 1;
-            if (this.comparator.compare(entry, getEntry(mid)) <= 0) {
+            if (this.comparator.compare(entry, getEntry(mid).toLowerCase()) <= 0) {
                 right = mid - 1;
             } else {
                 left = mid + 1;
@@ -179,7 +179,7 @@ public class DictionarySPDict extends Dictionary {
         while (left <= right) {
             mid = (left + right) >> 1;
             try {
-                equal = this.comparator.compare(entry, getEntry(mid));
+                equal = this.comparator.compare(entry, getEntry(mid).toLowerCase());
             } catch (Exception ex) {
                 return -1;
             }

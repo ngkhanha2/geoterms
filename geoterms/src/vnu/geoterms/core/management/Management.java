@@ -6,9 +6,7 @@
 package vnu.geoterms.core.management;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import javax.swing.DefaultListModel;
-import vnu.geoterms.core.storage.*;
 import vnu.geoterms.core.Interface.*;
 import javax.swing.ListModel;
 
@@ -19,9 +17,9 @@ import javax.swing.ListModel;
 public class Management implements IManagement {
 
     //private IDictionaries dictionaries;
-    private DefaultListModel<String> listModelLanguages;
+    private DefaultListModel<String> listModelLanguages = null;
     private String language;
-    private ArrayList<IDictionary> dictionaries;
+    private ArrayList<IDictionary> dictionaries = null;
 
     public Management() {
         this.dictionaries = new ArrayList<IDictionary>();
@@ -64,20 +62,19 @@ public class Management implements IManagement {
         DefaultListModel listModel = new DefaultListModel();
         listModel.clear();
         if (!key.trim().isEmpty()) {
+            key = key.trim().toLowerCase();
             for (int i = 0; i < this.dictionaries.size(); ++i) {
-                int index = this.dictionaries.get(i).indexOf(key);
+                int index = this.dictionaries.get(i).find(key);
                 if (index == -1) {
                     continue;
                 }
                 while (true) {
-                    String s = this.dictionaries.get(i).getEntry(index);
+                    String s = this.dictionaries.get(i).getEntry(index).toLowerCase().trim();
                     if (s.startsWith(key)) {
                         listModel.addElement(s);
                     } else {
                         break;
                     }
-                    s = null;
-                    System.gc();
                     ++index;
                 }
             }
