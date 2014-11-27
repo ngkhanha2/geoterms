@@ -19,6 +19,15 @@ public abstract class Dictionary implements IDictionary {
         this.fileName = fileName;
     }
 
+    public String getFileDirectory() {
+        return getDirectory() + this.fileName + ".jspd";
+    }
+
+    public String getDirectory() {
+        return "dict/" + this.fileName + "/";
+    }
+
+    @Override
     public String getFileName() {
         return fileName;
     }

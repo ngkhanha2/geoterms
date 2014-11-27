@@ -5,10 +5,22 @@
  */
 package vnu.geoterms.core.management;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
-import javax.swing.DefaultListModel;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 import vnu.geoterms.core.Interface.*;
-import javax.swing.ListModel;
+import vnu.geoterms.core.storage.jspd.DictionarySPDict;
 
 /**
  *
@@ -16,25 +28,47 @@ import javax.swing.ListModel;
  */
 public class Management implements IManagement {
 
-    //private IDictionaries dictionaries;
-    private DefaultListModel<String> listModelLanguages = null;
     private String language;
     private ArrayList<IDictionary> dictionaries = null;
 
+    private String CONFIG_FILE = "dict/config.xml";
+
     public Management() {
         this.dictionaries = new ArrayList<IDictionary>();
+        loadConfiguration();
+    }
 
-        this.listModelLanguages = new DefaultListModel<String>();
-        this.listModelLanguages.addElement("en");
-        this.listModelLanguages.addElement("vi");
+    private void loadConfiguration() {
+        File f = new File(CONFIG_FILE);
+        if (!f.exists()) {
+            return;
+        }
+        try {
+            Document doc = (Document) (DocumentBuilderFactory.newInstance().newDocumentBuilder()).parse(f);
+            doc.getDocumentElement().normalize();
+            NodeList nodes = doc.getElementsByTagName("dict");
+            for (int i = 0; i < nodes.getLength(); ++i) {
+                Node node = nodes.item(i);
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    Element element = (Element) node;
+                    try {
+                        String dir = element.getAttribute("dir");
+                        DictionarySPDict dict = new DictionarySPDict(dir);
+                        addDictionary(dict);
+                        dict.setSelected(Boolean.parseBoolean(element.getAttribute("selected")));
+                    } catch (Exception ex) {
 
-        this.language = "en";
-        //this.entries.changeLanguage(language);
+                    }
+                }
+            }
+        } catch (ParserConfigurationException | SAXException | IOException ex) {
+
+        }
     }
 
     @Override
-    public ListModel getListModelDictionaries() {
-        return null;
+    public ArrayList<IDictionary> getDictionaries() {
+        return this.dictionaries;
     }
 
     public int insert(String entry, int dictionaryIndex) {
@@ -46,7 +80,7 @@ public class Management implements IManagement {
         String value = "<html><body><div>";
         int realIndex;
         for (int i = 0; i < this.dictionaries.size(); ++i) {
-            realIndex = this.dictionaries.get(i).find(entry);
+            realIndex = this.dictionaries.get(i).indexOf(entry);
             if (realIndex >= 0) {
                 value += "<div><b>" + this.dictionaries.get(i).getName() + "</b><hr></div>";
                 value += this.dictionaries.get(i).getHTMLDivDefinition(realIndex);
@@ -58,44 +92,61 @@ public class Management implements IManagement {
     }
 
     @Override
-    public ListModel getListModelEntriesWithKey(String key) {
-        DefaultListModel listModel = new DefaultListModel();
-        listModel.clear();
-        if (!key.trim().isEmpty()) {
-            key = key.trim().toLowerCase();
+    public ArrayList<String> getEntriesWithKey(String key) {
+        ArrayList<String> list = new ArrayList<>();
+        key = key.trim();
+        if (!key.isEmpty()) {
+            key = key.toLowerCase();
             for (int i = 0; i < this.dictionaries.size(); ++i) {
-                int index = this.dictionaries.get(i).find(key);
-                if (index == -1) {
-                    continue;
-                }
-                while (true) {
-                    String s = this.dictionaries.get(i).getEntry(index).toLowerCase().trim();
-                    if (s.startsWith(key)) {
-                        listModel.addElement(s);
-                    } else {
-                        break;
+                if (this.dictionaries.get(i).isSelected()) {
+                    int index = this.dictionaries.get(i).find(key);
+                    if (index == -1) {
+                        continue;
                     }
-                    ++index;
+                    while (true) {
+                        String s = this.dictionaries.get(i).getEntry(index).toLowerCase().trim();
+                        if (s.startsWith(key)) {
+                            list.add(s);
+                        } else {
+                            break;
+                        }
+                        ++index;
+                    }
                 }
             }
         }
-        return listModel;
+        return list;
     }
 
     @Override
     public void addDictionary(IDictionary dictionary) {
         this.dictionaries.add(dictionary);
-        //dictionary.syncronize(this.entries);
     }
 
     @Override
-    public String getLocale() {
-        return this.language;
-    }
+    public void update() {
+        try {
+            Document doc = (Document) (DocumentBuilderFactory.newInstance().newDocumentBuilder()).newDocument();
+            Element dicts = (Element) doc.appendChild(doc.createElement("dicts"));
+            for (int i = 0; i < this.dictionaries.size(); ++i) {
+                Element dict = (Element) dicts.appendChild(doc.createElement("dict"));
 
-    @Override
-    public void setLocale(String locale) {
-        this.language = locale;
-        //this.entries.changeLanguage(locale);
+                Attr attr = doc.createAttribute("dir");
+                attr.setValue(this.dictionaries.get(i).getFileName());
+                dict.setAttributeNode(attr);
+
+                attr = doc.createAttribute("selected");
+                attr.setValue(Boolean.toString(this.dictionaries.get(i).isSelected()));
+                dict.setAttributeNode(attr);
+
+                attr = doc.createAttribute("type");
+                attr.setValue("jspd");
+                dict.setAttributeNode(attr);
+
+                TransformerFactory.newInstance().newTransformer().transform(new DOMSource(doc), new StreamResult(new File(CONFIG_FILE)));
+            }
+        } catch (Exception ex) {
+
+        }
     }
 }

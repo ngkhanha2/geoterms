@@ -5,18 +5,31 @@
  */
 package vnu.geoterms.core.ui;
 
+import vnu.geoterms.core.component.JCheckBoxWithObject;
+import javax.swing.DefaultListModel;
+import vnu.geoterms.core.Interface.IManagement;
+
 /**
  *
  * @author Khanh
  */
 public class JDialogDictionariesManagement extends javax.swing.JDialog {
 
+    private IManagement management;
+
     /**
      * Creates new form JDialogDictionariesManagement
      */
-    public JDialogDictionariesManagement(java.awt.Frame parent, boolean modal) {
+    public JDialogDictionariesManagement(java.awt.Frame parent, boolean modal, IManagement management) {
         super(parent, modal);
         initComponents();
+        this.management = management;
+        this.jCheckBoxListDictionary.setModel(new DefaultListModel());
+        for (int i = 0; i < this.management.getDictionaries().size(); ++i) {
+            JCheckBoxWithObject jCheckboxWithObject = new JCheckBoxWithObject(this.management.getDictionaries().get(i).getName());
+            jCheckboxWithObject.setSelected(this.management.getDictionaries().get(i).isSelected());
+            ((DefaultListModel) this.jCheckBoxListDictionary.getModel()).addElement(jCheckboxWithObject);
+        }
     }
 
     /**
@@ -29,18 +42,12 @@ public class JDialogDictionariesManagement extends javax.swing.JDialog {
     private void initComponents() {
 
         jToolBar1 = new javax.swing.JToolBar();
-        jButtonNewDictionary = new javax.swing.JButton();
         jButtonAddDictionary = new javax.swing.JButton();
         jButtonRemoveDictionary = new javax.swing.JButton();
-        jButtonGetDictionaryProperties = new javax.swing.JButton();
-        jSeparator2 = new javax.swing.JToolBar.Separator();
-        jButtonImportDictionary = new javax.swing.JButton();
-        jButtonExportDictionary = new javax.swing.JButton();
-        jSeparator1 = new javax.swing.JToolBar.Separator();
-        jButtonMoveUp = new javax.swing.JButton();
-        jButtonMoveDown = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jListDictionary = new javax.swing.JList();
+        jCheckBoxListDictionary = new vnu.geoterms.core.component.JCheckBoxList();
+        jButtonOk = new javax.swing.JButton();
+        jButtonCancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Manage Dictionaries");
@@ -48,13 +55,6 @@ public class JDialogDictionariesManagement extends javax.swing.JDialog {
 
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
-
-        jButtonNewDictionary.setIcon(new javax.swing.ImageIcon(getClass().getResource("/toolbarButtonGraphics/general/New16.gif"))); // NOI18N
-        jButtonNewDictionary.setToolTipText("New Dictionary");
-        jButtonNewDictionary.setFocusable(false);
-        jButtonNewDictionary.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButtonNewDictionary.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButtonNewDictionary);
 
         jButtonAddDictionary.setIcon(new javax.swing.ImageIcon(getClass().getResource("/toolbarButtonGraphics/general/Add16.gif"))); // NOI18N
         jButtonAddDictionary.setToolTipText("Add Dictionary");
@@ -70,77 +70,73 @@ public class JDialogDictionariesManagement extends javax.swing.JDialog {
         jButtonRemoveDictionary.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar1.add(jButtonRemoveDictionary);
 
-        jButtonGetDictionaryProperties.setIcon(new javax.swing.ImageIcon(getClass().getResource("/toolbarButtonGraphics/general/Properties16.gif"))); // NOI18N
-        jButtonGetDictionaryProperties.setToolTipText("Dictionary Properties");
-        jButtonGetDictionaryProperties.setFocusable(false);
-        jButtonGetDictionaryProperties.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButtonGetDictionaryProperties.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButtonGetDictionaryProperties);
-        jToolBar1.add(jSeparator2);
+        jScrollPane1.setViewportView(jCheckBoxListDictionary);
 
-        jButtonImportDictionary.setIcon(new javax.swing.ImageIcon(getClass().getResource("/toolbarButtonGraphics/general/Import16.gif"))); // NOI18N
-        jButtonImportDictionary.setToolTipText("Import Dictionary");
-        jButtonImportDictionary.setFocusable(false);
-        jButtonImportDictionary.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButtonImportDictionary.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButtonImportDictionary);
+        jButtonOk.setText("OK");
+        jButtonOk.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonOkMouseClicked(evt);
+            }
+        });
 
-        jButtonExportDictionary.setIcon(new javax.swing.ImageIcon(getClass().getResource("/toolbarButtonGraphics/general/Export16.gif"))); // NOI18N
-        jButtonExportDictionary.setToolTipText("Export Dictionary");
-        jButtonExportDictionary.setFocusable(false);
-        jButtonExportDictionary.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButtonExportDictionary.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButtonExportDictionary);
-        jToolBar1.add(jSeparator1);
-
-        jButtonMoveUp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/toolbarButtonGraphics/navigation/Up16.gif"))); // NOI18N
-        jButtonMoveUp.setToolTipText("Move Up");
-        jButtonMoveUp.setFocusable(false);
-        jButtonMoveUp.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButtonMoveUp.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButtonMoveUp);
-
-        jButtonMoveDown.setIcon(new javax.swing.ImageIcon(getClass().getResource("/toolbarButtonGraphics/navigation/Down16.gif"))); // NOI18N
-        jButtonMoveDown.setToolTipText("Move Down");
-        jButtonMoveDown.setFocusable(false);
-        jButtonMoveDown.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButtonMoveDown.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButtonMoveDown);
-
-        jScrollPane1.setViewportView(jListDictionary);
+        jButtonCancel.setText("Cancel");
+        jButtonCancel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonCancelMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButtonOk, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonCancel)
+                    .addComponent(jButtonOk))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButtonCancelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonCancelMouseClicked
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jButtonCancelMouseClicked
+
+    private void jButtonOkMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonOkMouseClicked
+        // TODO add your handling code here:
+        DefaultListModel listModel = (DefaultListModel) this.jCheckBoxListDictionary.getModel();
+        for (int i = 0; i < listModel.size(); ++i) {
+            this.management.getDictionaries().get(i).setSelected(((JCheckBoxWithObject) listModel.getElementAt(i)).isSelected());
+        }
+        this.management.update();
+        this.dispose();
+    }//GEN-LAST:event_jButtonOkMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAddDictionary;
-    private javax.swing.JButton jButtonExportDictionary;
-    private javax.swing.JButton jButtonGetDictionaryProperties;
-    private javax.swing.JButton jButtonImportDictionary;
-    private javax.swing.JButton jButtonMoveDown;
-    private javax.swing.JButton jButtonMoveUp;
-    private javax.swing.JButton jButtonNewDictionary;
+    private javax.swing.JButton jButtonCancel;
+    private javax.swing.JButton jButtonOk;
     private javax.swing.JButton jButtonRemoveDictionary;
-    private javax.swing.JList jListDictionary;
+    private vnu.geoterms.core.component.JCheckBoxList jCheckBoxListDictionary;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JToolBar.Separator jSeparator1;
-    private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
 }

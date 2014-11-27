@@ -5,7 +5,7 @@
  */
 package vnu.geoterms.core.Interface;
 
-import javax.swing.*;
+import java.util.ArrayList;
 
 /**
  *
@@ -13,15 +13,13 @@ import javax.swing.*;
  */
 public interface IManagement {
 
-    ListModel getListModelDictionaries();
+    ArrayList<IDictionary> getDictionaries();
 
     String getEntryHTMLDefinition(String entry);
 
     void addDictionary(IDictionary dictionary);
 
-    String getLocale();
+    ArrayList<String> getEntriesWithKey(String key);
 
-    void setLocale(String locale);
-
-    ListModel getListModelEntriesWithKey(String key);
+    void update();
 }

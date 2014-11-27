@@ -30,10 +30,12 @@ public class DictionarySPDict extends Dictionary {
 
     private String name;
 
+    private boolean selected;
+
     public DictionarySPDict(String fileName) {
         super(fileName);
         try {
-            File f = new File(fileName);
+            File f = new File(this.getFileDirectory());
             if (!f.exists()) {
                 return;
             }
@@ -321,7 +323,7 @@ public class DictionarySPDict extends Dictionary {
 
     @Override
     public int find(String entry) {
-        return binarySearchExisting(entry);
+        return binarySearchPosition(entry);
     }
 
     @Override
@@ -336,7 +338,7 @@ public class DictionarySPDict extends Dictionary {
     @Override
     public String getEntry(int index) {
         if (index < 0 || index >= this.entryQuantity) {
-            return null;
+            return "";
         }
         try {
             changeFilePointerByListIndex(index);
@@ -423,9 +425,9 @@ public class DictionarySPDict extends Dictionary {
                         value.append("<div style=\"margin-left: 20px;\"><font color=brown><b>");
                         break;
                     case '~':
-//                        value.append("<center><img src = \"");
-//                        File f = new File(frmMain.duongDanChinh + File.separator + "Images" + File.separator);
-//                        value.append(f.toURI().toString());
+                        value.append("<center><img src = \"");
+                        File f = new File(getDirectory() + "Images" + File.separator);
+                        value.append(f.toURI().toString());
                         break;
                     default:
                         value.append(definition.charAt(i));
@@ -455,7 +457,7 @@ public class DictionarySPDict extends Dictionary {
                 value.append("</b></div></font>");
                 break;
             case '~':
-//                value.append("\"></center>");
+                value.append("\"></center>");
                 break;
             default:
                 value.append("<br>");
@@ -473,5 +475,15 @@ public class DictionarySPDict extends Dictionary {
     @Override
     public int indexOf(String entry) {
         return binarySearchExisting(entry);
+    }
+
+    @Override
+    public boolean isSelected() {
+        return selected;
+    }
+
+    @Override
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 }
