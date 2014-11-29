@@ -6,7 +6,7 @@
 package vnu.geoterms.core.ui;
 
 import javax.swing.JOptionPane;
-import vnu.geoterms.core.storage.Dictionary;
+import vnu.geoterms.core.Dictionary;
 
 /**
  *

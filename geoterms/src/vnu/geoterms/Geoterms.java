@@ -6,7 +6,7 @@
 package vnu.geoterms;
 
 import javax.swing.UIManager;
-import vnu.geoterms.core.management.Management;
+import vnu.geoterms.core.Management;
 import vnu.geoterms.core.ui.JFrameMain;
 
 /**

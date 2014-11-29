@@ -6,7 +6,7 @@
 package vnu.geoterms.core.ui;
 
 import javax.swing.JOptionPane;
-import vnu.geoterms.core.storage.Dictionary;
+import vnu.geoterms.core.Dictionary;
 
 /**
  *
@@ -47,6 +47,8 @@ public class JDialogEditEntry extends javax.swing.JDialog {
         jButtonCancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Chỉnh sửa định nghĩa từ khóa");
+        setResizable(false);
 
         jLabel1.setText("Từ khóa:");
 

@@ -27,7 +27,7 @@ public class JDialogDictionariesManagement extends javax.swing.JDialog {
         this.jCheckBoxListDictionary.setModel(new DefaultListModel());
         for (int i = 0; i < this.management.getDictionaries().size(); ++i) {
             JCheckBoxWithObject jCheckboxWithObject = new JCheckBoxWithObject(this.management.getDictionaries().get(i).getName());
-            jCheckboxWithObject.setSelected(this.management.getDictionaries().get(i).isSelected());
+            //jCheckboxWithObject.setSelected(this.management.getDictionaries().get(i).isSelected());
             ((DefaultListModel) this.jCheckBoxListDictionary.getModel()).addElement(jCheckboxWithObject);
         }
     }

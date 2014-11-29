@@ -31,8 +31,6 @@ public interface IDictionary {
 
     String getDefinition(int index);
 
-    boolean isSelected();
-
     void setSelected(boolean selected);
 
     void close();

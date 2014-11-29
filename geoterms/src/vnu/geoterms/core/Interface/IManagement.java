@@ -19,5 +19,5 @@ public interface IManagement {
 
     void update();
 
-    String getCurrentDirectory();
+//    String getCurrentDirectory();
 }
