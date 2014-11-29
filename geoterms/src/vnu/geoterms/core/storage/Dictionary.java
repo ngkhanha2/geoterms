@@ -5,6 +5,7 @@
  */
 package vnu.geoterms.core.storage;
 
+import java.io.File;
 import vnu.geoterms.core.Interface.IDictionary;
 
 /**
@@ -20,15 +21,22 @@ public abstract class Dictionary implements IDictionary {
     }
 
     public String getFileDirectory() {
-        return getDirectory() + this.fileName + ".jspd";
+        return getDirectory() + File.separator + this.fileName + ".jspd";
     }
 
     public String getDirectory() {
-        return "dict/" + this.fileName + "/";
+        return System.getProperty("user.dir") + File.separator + "dict" + File.separator + this.fileName;
     }
 
-    @Override
     public String getFileName() {
         return fileName;
+    }
+
+    public String getHTMLDivDefinition(int index) {
+        return "<div></div>";
+    }
+
+    public String getHTMLDefinition(int index) {
+        return "<html></html>";
     }
 }

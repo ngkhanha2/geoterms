@@ -20,6 +20,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import vnu.geoterms.core.Interface.*;
+import vnu.geoterms.core.storage.Dictionary;
 import vnu.geoterms.core.storage.jspd.DictionarySPDict;
 
 /**
@@ -68,55 +69,53 @@ public class Management implements IManagement {
 
     @Override
     public ArrayList<IDictionary> getDictionaries() {
-        return this.dictionaries;
+        return (ArrayList<IDictionary>) this.dictionaries;
     }
 
     public int insert(String entry, int dictionaryIndex) {
         return 0;
     }
 
-    @Override
-    public String getEntryHTMLDefinition(String entry) {
-        String value = "<html><body><div>";
-        int realIndex;
-        for (int i = 0; i < this.dictionaries.size(); ++i) {
-            realIndex = this.dictionaries.get(i).indexOf(entry);
-            if (realIndex >= 0) {
-                value += "<div><b>" + this.dictionaries.get(i).getName() + "</b><hr></div>";
-                value += this.dictionaries.get(i).getHTMLDivDefinition(realIndex);
-                value += "<div></div>";
-            }
-        }
-        value += "</div></body></html>";
-        return value;
-    }
+//    public String getEntryHTMLDefinition(String entry) {
+//        String value = "<html><body><div>";
+//        int realIndex;
+//        for (int i = 0; i < this.dictionaries.size(); ++i) {
+//            realIndex = this.dictionaries.get(i).indexOf(entry);
+//            if (realIndex >= 0) {
+//                value += "<div><b>" + this.dictionaries.get(i).getName() + "</b><hr></div>";
+//                value += ((Dictionary) this.dictionaries.get(i)).getHTMLDivDefinition(realIndex);
+//                value += "<div></div>";
+//            }
+//        }
+//        value += "</div></body></html>";
+//        return value;
+//    }
 
-    @Override
-    public ArrayList<String> getEntriesWithKey(String key) {
-        ArrayList<String> list = new ArrayList<>();
-        key = key.trim();
-        if (!key.isEmpty()) {
-            key = key.toLowerCase();
-            for (int i = 0; i < this.dictionaries.size(); ++i) {
-                if (this.dictionaries.get(i).isSelected()) {
-                    int index = this.dictionaries.get(i).find(key);
-                    if (index == -1) {
-                        continue;
-                    }
-                    while (true) {
-                        String s = this.dictionaries.get(i).getEntry(index).toLowerCase().trim();
-                        if (s.startsWith(key)) {
-                            list.add(s);
-                        } else {
-                            break;
-                        }
-                        ++index;
-                    }
-                }
-            }
-        }
-        return list;
-    }
+//    public ArrayList<String> getEntriesWithKey(String key) {
+//        ArrayList<String> list = new ArrayList<>();
+//        key = key.trim();
+//        if (!key.isEmpty()) {
+//            key = key.toLowerCase();
+//            for (int i = 0; i < this.dictionaries.size(); ++i) {
+//                if (this.dictionaries.get(i).isSelected()) {
+//                    int index = this.dictionaries.get(i).find(key);
+//                    if (index == -1) {
+//                        continue;
+//                    }
+//                    while (true) {
+//                        String s = this.dictionaries.get(i).getEntry(index).toLowerCase().trim();
+//                        if (s.startsWith(key)) {
+//                            list.add(s);
+//                        } else {
+//                            break;
+//                        }
+//                        ++index;
+//                    }
+//                }
+//            }
+//        }
+//        return list;
+//    }
 
     @Override
     public void addDictionary(IDictionary dictionary) {
@@ -132,7 +131,7 @@ public class Management implements IManagement {
                 Element dict = (Element) dicts.appendChild(doc.createElement("dict"));
 
                 Attr attr = doc.createAttribute("dir");
-                attr.setValue(this.dictionaries.get(i).getFileName());
+                attr.setValue(((Dictionary) this.dictionaries.get(i)).getFileName());
                 dict.setAttributeNode(attr);
 
                 attr = doc.createAttribute("selected");
@@ -148,5 +147,10 @@ public class Management implements IManagement {
         } catch (Exception ex) {
 
         }
+    }
+
+    @Override
+    public String getCurrentDirectory() {
+        return System.getProperty("user.dir");
     }
 }

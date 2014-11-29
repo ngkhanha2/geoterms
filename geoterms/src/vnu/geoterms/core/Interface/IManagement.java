@@ -15,11 +15,9 @@ public interface IManagement {
 
     ArrayList<IDictionary> getDictionaries();
 
-    String getEntryHTMLDefinition(String entry);
-
     void addDictionary(IDictionary dictionary);
 
-    ArrayList<String> getEntriesWithKey(String key);
-
     void update();
+
+    String getCurrentDirectory();
 }

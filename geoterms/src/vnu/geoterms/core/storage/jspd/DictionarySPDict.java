@@ -32,6 +32,9 @@ public class DictionarySPDict extends Dictionary {
 
     private boolean selected;
 
+    private byte[] buffer;
+    private int bufferLength;
+
     public DictionarySPDict(String fileName) {
         super(fileName);
         try {
@@ -39,8 +42,12 @@ public class DictionarySPDict extends Dictionary {
             if (!f.exists()) {
                 return;
             }
+            this.buffer = new byte[20];
+            this.bufferLength = 20;
+
             this.raf = new RandomAccessFile(f, "rw");
-            String title = new String(readBytesAtFileOffset(this.raf.getFilePointer(), 7), 0, 7, "UTF-8");
+            readBytesAtFileOffset(this.raf.getFilePointer(), 7);
+            String title = new String(buffer, 0, 7, "UTF-8");
             if (!title.equals("2SPDict")) {
                 title = null;
                 return;
@@ -50,7 +57,8 @@ public class DictionarySPDict extends Dictionary {
             this.dataRemain = this.raf.readInt();
             this.raf.seek(this.listFileOffset);
             //Read other information of jspd file
-            this.otherInformation = readShortBytesAtFilePointer();
+            readShortBytesAtFilePointer();
+            this.otherInformation = buffer.clone();
 
             String[] information = (new String(this.otherInformation, "UTF-8")).split("\000");
             this.name = information[0];
@@ -67,65 +75,60 @@ public class DictionarySPDict extends Dictionary {
     }
 
     private void changeFilePointerByListIndex(int index) throws IOException {
-        this.raf.seek(this.listFileOffset + index * 4);
+        this.raf.seek(this.listFileOffset + (index << 2));
         this.raf.seek(this.raf.readInt());
     }
 
-    private byte[] readShortBytesAtFilePointer() throws IOException {
+    private void changeBufferLength() {
+        if (this.bufferLength > this.buffer.length) {
+            this.buffer = new byte[this.bufferLength];
+        }
+    }
+
+    private void readShortBytesAtFilePointer() throws IOException {
         // Get length of buffer
-        int length = this.raf.readShort();
-        //Declare buffer
-        byte[] buffer = new byte[length];
-        //Read buffer
-        this.raf.read(buffer, 0, length);
-        return buffer;
+        this.bufferLength = this.raf.readShort();
+        changeBufferLength();
+        this.raf.read(buffer, 0, this.bufferLength);
     }
 
-    private byte[] readLongBytesAtFilePointer() throws IOException {
+    private void readLongBytesAtFilePointer() throws IOException {
         // Get length of buffer
-        int length = this.raf.readInt();
-        //Declare buffer
-        byte[] buffer = new byte[length];
-        //Read buffer
-        this.raf.read(buffer, 0, length);
-        return buffer;
+        this.bufferLength = this.raf.readInt();
+        changeBufferLength();
+        this.raf.read(buffer, 0, this.bufferLength);
     }
 
-    private byte[] readShortBytesAtFileOffset(long offset) throws IOException {
+//    private byte[] readShortBytesAtFileOffset(long offset) throws IOException {
+//        this.raf.seek(offset);
+//        int length = this.raf.readShort();
+//        byte[] buffer = new byte[length];
+//        this.raf.read(buffer, 0, length);
+//        return buffer;
+//    }
+//
+//    private byte[] readLongBytesAtFileOffset(long offset) throws IOException {
+//        this.raf.seek(offset);
+//        int length = this.raf.readInt();
+//        byte[] buffer = new byte[length];
+//        this.raf.read(buffer, 0, length);
+//        return buffer;
+//    }
+    private void readBytesAtFileOffset(long offset, int length) throws IOException {
         this.raf.seek(offset);
-        int length = this.raf.readShort();
-        byte[] buffer = new byte[length];
+        this.bufferLength = length;
+        changeBufferLength();
         this.raf.read(buffer, 0, length);
-        return buffer;
-    }
-
-    private byte[] readLongBytesAtFileOffset(long offset) throws IOException {
-        this.raf.seek(offset);
-        int length = this.raf.readInt();
-        byte[] buffer = new byte[length];
-        this.raf.read(buffer, 0, length);
-        return buffer;
-    }
-
-    private byte[] readBytesAtFileOffset(long offset, int length) throws IOException {
-        this.raf.seek(offset);
-        byte[] buffer = new byte[length];
-        this.raf.read(buffer, 0, length);
-        return buffer;
     }
 
     private String readShortStringAtFilePointer() throws IOException {
-        //Get buffer
-        byte[] buffer = readShortBytesAtFilePointer();
-        //Convert buffer to string
-        return new String(buffer, 0, buffer.length, "UTF-8");
+        readShortBytesAtFilePointer();
+        return new String(this.buffer, 0, this.bufferLength, "UTF-8");
     }
 
     private String readLongStringAtFilePointer() throws IOException {
-        //Get buffer
-        byte[] buffer = readLongBytesAtFilePointer();
-        //Convert buffer to string
-        return new String(buffer, 0, buffer.length, "UTF-8");
+        readLongBytesAtFilePointer();
+        return new String(this.buffer, 0, this.bufferLength, "UTF-8");
     }
 
     private void writeShortBytesAtFilePointer(byte[] bytes, int length) throws IOException {
@@ -206,7 +209,8 @@ public class DictionarySPDict extends Dictionary {
         }
         index = binarySearchPosition(entry);
         try {
-            byte[] byteEntryList = readBytesAtFileOffset(this.listFileOffset, (int) (this.raf.length() - this.listFileOffset));
+            readBytesAtFileOffset(this.listFileOffset, (int) (this.raf.length() - this.listFileOffset));
+            byte[] byteEntryList = this.buffer;
             this.raf.seek(this.listFileOffset - this.otherInformation.length - 2);
 
             writeShortStringAtFilePointer(entry);
@@ -218,7 +222,7 @@ public class DictionarySPDict extends Dictionary {
             int filePointer = (int) this.raf.getFilePointer();
             this.raf.write(byteEntryList, 0, index * 4);
             this.raf.writeInt((int) this.listFileOffset - this.otherInformation.length - 2);
-            this.raf.write(byteEntryList, index * 4, byteEntryList.length - index * 4);
+            this.raf.write(byteEntryList, index * 4, this.bufferLength - index * 4);
 
             this.raf.seek(7L);
 
@@ -257,7 +261,8 @@ public class DictionarySPDict extends Dictionary {
             length = this.raf.readInt();
             this.raf.write(new byte[length], 0, length);
 
-            byte[] byteEntryList = readBytesAtFileOffset(listFileOffset, (int) (this.raf.length() - this.listFileOffset));
+            readBytesAtFileOffset(listFileOffset, (int) (this.raf.length() - this.listFileOffset));
+            byte[] byteEntryList = this.buffer;
             this.raf.seek(this.listFileOffset - this.otherInformation.length - 2);
 
             writeShortStringAtFilePointer(entry);
@@ -271,7 +276,7 @@ public class DictionarySPDict extends Dictionary {
             writeShortBytesAtFilePointer(this.otherInformation, this.otherInformation.length);
 
             long filePointer = this.raf.getFilePointer();
-            this.raf.write(byteEntryList, 0, byteEntryList.length);
+            this.raf.write(byteEntryList, 0, this.bufferLength);
 
             this.raf.seek(7L);
             this.raf.writeInt((int) (filePointer - this.otherInformation.length - 2));
@@ -306,10 +311,11 @@ public class DictionarySPDict extends Dictionary {
             length = this.raf.readInt();
             this.raf.write(new byte[length], 0, length);
 
-            byte[] byteEntryList = readBytesAtFileOffset(this.listFileOffset + index * 4 + 4, (this.entryQuantity - index - 1) * 4);
+            readBytesAtFileOffset(this.listFileOffset + index * 4 + 4, (this.entryQuantity - index - 1) * 4);
+            byte[] byteEntryList = this.buffer;
 
             this.raf.seek(this.listFileOffset + index * 4);
-            this.raf.write(byteEntryList, 0, byteEntryList.length);
+            this.raf.write(byteEntryList, 0, this.bufferLength);
             this.raf.setLength(this.raf.getFilePointer());
             this.raf.seek(11L);
             --this.entryQuantity;
@@ -338,7 +344,7 @@ public class DictionarySPDict extends Dictionary {
     @Override
     public String getEntry(int index) {
         if (index < 0 || index >= this.entryQuantity) {
-            return "";
+            return null;
         }
         try {
             changeFilePointerByListIndex(index);
@@ -426,7 +432,7 @@ public class DictionarySPDict extends Dictionary {
                         break;
                     case '~':
                         value.append("<center><img src = \"");
-                        File f = new File(getDirectory() + "Images" + File.separator);
+                        File f = new File(getDirectory() + File.separator + "images" + File.separator);
                         value.append(f.toURI().toString());
                         break;
                     default:
@@ -468,6 +474,11 @@ public class DictionarySPDict extends Dictionary {
     }
 
     @Override
+    public String getHTMLDefinition(int index) {
+        return "<html><body>" + getHTMLDivDefinition(index) + "</body></html>";
+    }
+
+    @Override
     public String getName() {
         return name;
     }
@@ -486,4 +497,30 @@ public class DictionarySPDict extends Dictionary {
     public void setSelected(boolean selected) {
         this.selected = selected;
     }
+
+    @Override
+    public int getSize() {
+        return this.entryQuantity;
+    }
+
+//    @Override
+//    public String[] getEntries() {
+//        String entries[] = new String[this.entryQuantity];
+//        for (int i = 0; i < this.entryQuantity; ++i) {
+//            try {
+//                this.raf.seek(this.listFileOffset + (i << 2));
+//                this.raf.seek(this.raf.readInt());
+//                this.bufferLength = this.raf.readShort();
+//                if (this.bufferLength > this.buffer.length) {
+//                    this.buffer = new byte[this.bufferLength];
+//                }
+//                this.raf.read(buffer, 0, this.bufferLength);
+//                entries[i] = new String(this.buffer, 0, this.bufferLength, "UTF-8");
+//            } catch (IOException ex) {
+//                Logger.getLogger(DictionarySPDict.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//
+//        }
+//        return entries;
+//    }
 }

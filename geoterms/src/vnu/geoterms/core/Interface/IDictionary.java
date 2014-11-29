@@ -27,17 +27,15 @@ public interface IDictionary {
 
     String getName();
 
-    String getFileName();
-
     String getEntry(int index);
 
     String getDefinition(int index);
-
-    String getHTMLDivDefinition(int index);
 
     boolean isSelected();
 
     void setSelected(boolean selected);
 
     void close();
+
+    int getSize();
 }
